@@ -27,6 +27,8 @@ Welcome to **L-earnings**! This decentralized application enables users to reque
 
 ### **Smart Contract**
 - **Solidity**: Ethereum smart contract development.
+
+### **Testing**
 - **Truffle Suite**: For contract compilation, deployment, and testing.
 
 ---
@@ -64,11 +66,24 @@ Welcome to **L-earnings**! This decentralized application enables users to reque
 
 ## **Screenshots**
 
-### Refund Request Page
-![Refund Request Page](screenshots/refund-request.png)
+## Login Page
+![Login Page](screenshots/login.png)
 
-### Refund Confirmation
-![Refund Confirmation](screenshots/refund-confirmation.png)
+## Courses Selection Page
+![Courses Selection Page](screenshots/coursespage.png)
+
+## Buying Page
+![Buying Page](screenshots/buyingpage.png)
+
+## Courses Page
+![Courses Page](screenshots/courses.png)
+
+## Quiz Page
+![Quiz Page](screenshots/quizpage.png)
+
+### Refund Page
+![Refund Page](screenshots/refundpage.png)
+
 
 ---
 
