@@ -225,8 +225,7 @@ Follow these steps to run the **L-earnings** project locally on your machine:
      ```  
    - Open your browser and navigate to `http://127.0.0.1:8000`.
 
-
-You should now have the **L-earnings** DApp running locally, fully integrated with your smart contract! 🚀
+You should now have the **L-earnings** DApp running locally, fully integrated with your smart contract! 
 ---
 
 ## **Screenshots**
