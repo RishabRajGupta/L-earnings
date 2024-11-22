@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refund - Educational DApp</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script> <!-- Include Web3.js -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.umd.min.js"></script>
+
+</head>
+<body>
+    <div class="logo-container">
+        <img src="logo.png" alt="Logo" class="logo">
+    </div>
+    <div class="container">
+        <h1>Refund Process</h1>
+        <p id="refundPercentage" class="refund-percentage"></p>
+        <form id="refundForm" onsubmit="return handleRefund(event)">
+            <div class="input-group">
+                <input type="text" id="userAddress" placeholder="Your Wallet Address" required>
+            </div>
+            <button type="submit">Submit Refund Request</button>
+        </form>
+        <p>Your refund will be processed based on your quiz score.</p>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Educational DApp. All rights reserved.</p>
+            <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <style>
+        /* Reusing existing styles */
+        body {
+            background-color: #f7f1e3;
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .logo-container {
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 150px;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 400px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h1 {
+            color: #800000;
+            margin-bottom: 20px;
+        }
+        .refund-percentage {
+            font-size: 18px;
+            color: #003366; /* Dark blue color for the percentage */
+            margin-bottom: 20px; /* Space below percentage */
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #8B8C7A;
+            border-radius: 30px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #800000;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #7A0000;
+        }
+        footer {
+            margin-top: auto;
+            width: 100%;
+            background-color: #ffffff;
+            border-top: 2px solid #003366;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .footer-content {
+            color: #003366;
+            font-size: 14px;
+        }
+        .footer-content a {
+            color: #003366;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .footer-content a:hover {
+            text-decoration: underline;
+            color: #800000;
+        }
+    </style>
+
+<script>
+    // Ensure Web3 is available
+    let web3;
+    const contractAddress = '0x69f45D3210c1E45f15AA915eBC869faF34FA109b'; // Replace with your contract address
+    const contractABI =  [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "RefundProcessed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "RefundRequested",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "refunds",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [],
+      "name": "deposit",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function",
+      "payable": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "requestRefund",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address payable",
+          "name": "_user",
+          "type": "address"
+        }
+      ],
+      "name": "processRefund",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getContractBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    }
+  ];
+    // Initialize web3
+    if (typeof window.ethereum !== 'undefined') {
+        web3 = new Web3(window.ethereum);
+    } else {
+        alert("Please install MetaMask!");
+    }
+
+    async function handleRefund(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        const userAddress = document.getElementById('userAddress').value; // User's wallet address
+
+        // Fetch the refund percentage from local storage
+        const refundPercentage = localStorage.getItem('refundPercentage');
+
+        if (!refundPercentage) {
+            alert("No refund percentage available.");
+            return;
+        }
+
+        // Calculate the refund amount based on course price (1 ETH)
+        const coursePrice = 1; // Assuming the price of the course is 1 ETH
+        const refundAmount = (coursePrice * (refundPercentage / 100)); // Refund amount in ETH
+
+        // Convert refund amount from ETH to Wei
+        const amountInWei = web3.utils.toWei(refundAmount.toString(), 'ether');
+
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const sender = accounts[0]; // Get the current user's account
+
+            // Check the contract balance
+            const contractBalance = await contract.methods.getContractBalance().call();
+            if (Number(contractBalance) < Number(amountInWei)) {
+                alert("Insufficient contract balance for refund.");
+                return;
+            }
+
+            // Call the processRefund function on the contract
+            await contract.methods.processRefund(userAddress).send({ from: sender });
+            alert("Refund successful!");
+            
+            // Redirect to courses page
+            window.location.href = 'courses.html';
+        } catch (error) {
+            console.error(error);
+            alert("Error processing refund: " + error.message);
+        }
+    }
+
+    // Function to display the refund percentage
+    function displayRefundPercentage() {
+        // Fetch the refund percentage from local storage
+        const refundPercentage = localStorage.getItem('refundPercentage');
+
+        // If refundPercentage is not null, display it
+        if (refundPercentage) {
+            document.getElementById('refundPercentage').textContent = 
+                `Your Refund Percentage: ${refundPercentage}%`;
+        } else {
+            document.getElementById('refundPercentage').textContent = 
+                "Refund percentage not set.";
+        }
+    }
+
+    // Call the function to display the refund percentage when the page loads
+    window.onload = displayRefundPercentage;
+</script>
+</body>
+</html>

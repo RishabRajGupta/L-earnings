@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Educational DApp</title>
+    <style>
+        body {
+            background-color: #f7f1e3;
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 400px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h1 {
+            color: #800000;
+            margin-bottom: 20px;
+        }
+        .question {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #800000;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #7A0000;
+        }
+        .timer {
+            font-size: 18px;
+            color: #003366; /* Dark blue color for the timer */
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz</h1>
+        <div class="timer" id="timer">Time Left: <span id="timeLeft">60</span> seconds</div>
+        <form id="quizForm" onsubmit="return handleQuiz(event)">
+            <div class="question">
+                <p>1. What is the capital of France?</p>
+                <input type="radio" name="q1" value="correct"> Paris<br>
+                <input type="radio" name="q1" value="wrong"> London<br>
+                <input type="radio" name="q1" value="wrong"> Rome<br>
+            </div>
+            <div class="question">
+                <p>2. What is 2 + 2?</p>
+                <input type="radio" name="q2" value="wrong"> 3<br>
+                <input type="radio" name="q2" value="correct"> 4<br>
+                <input type="radio" name="q2" value="wrong"> 5<br>
+            </div>
+            <div class="question">
+                <p>3. What is the largest planet in our solar system?</p>
+                <input type="radio" name="q3" value="correct"> Jupiter<br>
+                <input type="radio" name="q3" value="wrong"> Earth<br>
+                <input type="radio" name="q3" value="wrong"> Mars<br>
+            </div>
+            <button type="submit">Submit Quiz</button>
+        </form>
+    </div>
+
+    <script>
+        let timeLeft = 60; // 60 seconds timer
+        let timerId;
+
+        function startTimer() {
+            timerId = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timeLeft').textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerId);
+                    alert("Time's up! Submitting your quiz.");
+                    handleQuiz(); // Automatically submit the quiz when time runs out
+                }
+            }, 1000);
+        }
+
+        function handleQuiz(event) {
+            if (event) event.preventDefault(); // Prevent default form submission
+
+            // Clear the timer
+            clearInterval(timerId);
+
+            // Calculate score
+            const answers = {
+                q1: 'correct', // Correct answer for question 1
+                q2: 'correct', // Correct answer for question 2
+                q3: 'correct', // Correct answer for question 3
+            };
+            let score = 0;
+            for (let question in answers) {
+                const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
+                if (selectedAnswer && selectedAnswer.value === answers[question]) {
+                    score++;
+                }
+            }
+
+            // Calculate percentage
+            const totalQuestions = Object.keys(answers).length;
+            const percentage = (score / totalQuestions) * 100;
+
+            // Store refund percentage in local storage
+            localStorage.setItem('refundPercentage', percentage);
+
+            // Redirect to refund page after showing the result
+            alert(`You scored ${percentage}%`);
+            window.location.href = 'refundpage.html'; // Change to your refund page URL
+        }
+
+        // Start the timer when the page loads
+        window.onload = startTimer;
+    </script>
+</body>
+</html>

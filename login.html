@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Educational DApp</title>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="logo.png" alt="Logo" class="logo">
+    </div>
+    <div class="container">
+        <h1>Welcome!</h1>
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <p class="footer-links"><a href="#">Forgot Password?</a> | <a href="signup.html">Sign Up</a></p>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Educational DApp. All rights reserved.</p>
+            <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <style>
+        /* Existing styles for the page */
+        body {
+            background-color: #f7f1e3;
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .logo-container {
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 250px;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            width: 400px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        h1 {
+            color: #800000;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #8B8C7A;
+            border-radius: 30px;
+            transition: border-color 0.3s;
+            font-size: 16px;
+        }
+        input:focus {
+            border-color: #003366;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #800000;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #7A0000;
+        }
+        .footer-links {
+            margin-top: 15px;
+        }
+        .footer-links a {
+            color: #003366;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+            color: #800000;
+        }
+        footer {
+            margin-top: auto;
+            width: 100%;
+            background-color: #ffffff;
+            border-top: 2px solid #003366;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .footer-content {
+            color: #003366;
+            font-size: 14px;
+        }
+        .footer-content a {
+            color: #003366;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .footer-content a:hover {
+            text-decoration: underline;
+            color: #800000;
+        }
+    </style>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault(); // Prevent the default form submission
+            const username = document.getElementById('username').value; // Get username
+            alert(`Welcome back, ${username}!`); // Show welcome message
+
+            // Redirect to courses page
+            redirectToCourses();
+        }
+
+        function redirectToCourses() {
+            window.location.href = 'courses.html'; // Redirect to courses.html
+        }
+    </script>
+</body>
+</html>
