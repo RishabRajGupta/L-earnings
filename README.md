@@ -63,6 +63,93 @@ Welcome to **L-earnings**! This decentralized application enables users to reque
 | `getContractBalance()` | Returns the current balance of the contract.                            |
 
 ---
+## Prerequisites
+### Updated Prerequisites for L-earnings Project
+
+To run, test, and deploy the **L-earnings** DApp, ensure you have the following prerequisites installed and configured:
+
+---
+
+#### **1. Node.js**  
+   - Download and install Node.js from [Node.js official website](https://nodejs.org/).  
+   - Verify installation by running:  
+     ```bash
+     node -v
+     npm -v
+     ```
+
+---
+
+#### **2. Truffle Suite** (for smart contract development and testing)  
+   - Install Truffle globally using npm:  
+     ```bash
+     npm install -g truffle
+     ```
+   - Verify installation:  
+     ```bash
+     truffle version
+     ```
+   - Truffle is used for:  
+     - Compiling Solidity contracts.  
+     - Deploying contracts to a blockchain network.  
+     - Running automated tests.
+
+---
+
+#### **3. Ganache** (Local Ethereum Blockchain for testing)  
+   - Download and install Ganache from [Ganache official website](https://trufflesuite.com/ganache/).  
+   - Alternatively, install it via npm:  
+     ```bash
+     npm install -g ganache
+     ```
+   - Ganache simulates a blockchain network, providing accounts preloaded with test ETH for smart contract interactions.
+
+---
+
+#### **4. MetaMask**  
+   - Install the MetaMask browser extension for interacting with the Ethereum blockchain.  
+   - Set up a wallet and connect it to the Ganache network (for local testing) or a testnet.
+
+---
+
+#### **5. Web3.js** (for blockchain interaction in the frontend)  
+   - Web3.js is included via a CDN in the project files. Ensure you have internet access when running the application.
+
+---
+
+#### **6. Ethers.js** (optional, for additional blockchain utilities)  
+   - Ethers.js is also included via a CDN in the project files.
+
+---
+
+#### **7. Solidity**  
+   - Solidity is the smart contract language used in this project. Truffle automatically compiles Solidity code.
+
+---
+
+#### **8. Code Editor**  
+   - Use a code editor such as [Visual Studio Code (VS Code)](https://code.visualstudio.com/) for managing project files and writing code.
+
+---
+
+#### **9. Ethereum Wallet with Test ETH**  
+   - Use MetaMask to manage your wallet. For testing, you can obtain test ETH from faucets (if using a public test network).
+
+---
+
+#### **10. Testing with Truffle**  
+   - Truffle is also used for writing and executing tests for smart contracts.
+   - Test the contracts with the following commands:
+     ```bash
+     truffle test
+     ```
+   - Ensure all tests pass before deployment.
+
+---
+
+These prerequisites will prepare you for a seamless experience in developing, testing, and deploying the **L-earnings** DApp.
+
+---
 
 ## **Screenshots**
 
