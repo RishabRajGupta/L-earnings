@@ -1,21 +1,48 @@
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { GraduationCap } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // This would be connected to authentication backend in the future
-    console.log("Login attempt with:", { email, password, rememberMe });
+    setIsSubmitting(true);
+    
+    try {
+      // This would be connected to authentication backend in the future
+      console.log("Login attempt with:", { email, password, rememberMe });
+      
+      // Simulate login success for now
+      toast({
+        title: "Login successful",
+        description: "Welcome back to L-earnings!",
+      });
+      
+      // In a real app, you'd verify credentials first
+      setTimeout(() => {
+        navigate("/");  // Redirect to home page
+      }, 1000);
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description: "Please check your credentials and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -77,8 +104,8 @@ const Login = () => {
                 Remember me
               </label>
             </div>
-            <Button type="submit" className="w-full">
-              Sign in
+            <Button type="submit" className="w-full" disabled={isSubmitting}>
+              {isSubmitting ? "Signing in..." : "Sign in"}
             </Button>
           </form>
 

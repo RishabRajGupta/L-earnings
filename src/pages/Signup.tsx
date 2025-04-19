@@ -1,11 +1,12 @@
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { GraduationCap } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const Signup = () => {
   const [fullName, setFullName] = useState("");
@@ -13,15 +14,58 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [agreedTerms, setAgreedTerms] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const validateForm = () => {
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      setPasswordError("Passwords do not match");
+      return false;
+    }
+    
+    if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters");
+      return false;
+    }
+    
+    setPasswordError("");
+    return true;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
       return;
     }
-    // This would be connected to authentication backend in the future
-    console.log("Signup attempt with:", { fullName, email, password, agreedTerms });
+    
+    setIsSubmitting(true);
+    
+    try {
+      // This would be connected to authentication backend in the future
+      console.log("Signup attempt with:", { fullName, email, password, agreedTerms });
+      
+      // Simulate successful registration
+      toast({
+        title: "Account created successfully",
+        description: "Welcome to L-earnings! You can now log in.",
+      });
+      
+      // In a real app, you'd register the user first
+      setTimeout(() => {
+        navigate("/login"); // Redirect to login page
+      }, 1500);
+    } catch (error) {
+      toast({
+        title: "Registration failed",
+        description: "There was an error creating your account. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -92,7 +136,14 @@ const Signup = () => {
                 placeholder="••••••••"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (confirmPassword && e.target.value !== confirmPassword) {
+                    setPasswordError("Passwords do not match");
+                  } else {
+                    setPasswordError("");
+                  }
+                }}
               />
             </div>
             <div className="space-y-2">
@@ -103,8 +154,18 @@ const Signup = () => {
                 placeholder="••••••••"
                 required
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  if (password && e.target.value !== password) {
+                    setPasswordError("Passwords do not match");
+                  } else {
+                    setPasswordError("");
+                  }
+                }}
               />
+              {passwordError && (
+                <p className="text-sm text-destructive">{passwordError}</p>
+              )}
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox 
@@ -127,8 +188,12 @@ const Signup = () => {
                 </Link>
               </label>
             </div>
-            <Button type="submit" className="w-full">
-              Sign up
+            <Button 
+              type="submit" 
+              className="w-full"
+              disabled={isSubmitting || !agreedTerms || Boolean(passwordError)}
+            >
+              {isSubmitting ? "Creating account..." : "Sign up"}
             </Button>
           </form>
 
