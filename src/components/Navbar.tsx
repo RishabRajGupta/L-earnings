@@ -44,6 +44,11 @@ const Navbar: React.FC = () => {
           <Link to="/about" className="text-sm font-medium hover:text-primary transition-colors">
             About
           </Link>
+          {isLoggedIn && (
+            <Link to="/my-courses" className="text-sm font-medium hover:text-primary transition-colors">
+              My Courses
+            </Link>
+          )}
         </nav>
         <div className="flex items-center gap-2">
           {isLoggedIn ? (
