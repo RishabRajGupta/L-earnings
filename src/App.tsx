@@ -12,6 +12,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
+import MyCourses from "./pages/MyCourses";
+import FinalTest from "./pages/FinalTest";
 import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient();
@@ -27,10 +29,12 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/courses/:id" element={<CourseDetail />} />
+            <Route path="/courses/:id/test" element={<FinalTest />} />
             <Route path="/how-it-works" element={<HowItWorksPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/about" element={<About />} />
+            <Route path="/my-courses" element={<MyCourses />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </TooltipProvider>
