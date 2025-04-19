@@ -25,8 +25,8 @@ interface Course {
 
 const Courses = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedLevel, setSelectedLevel] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedLevel, setSelectedLevel] = useState("all");
   const [priceRange, setPriceRange] = useState([0, 200]);
 
   // Sample categories
@@ -107,8 +107,8 @@ const Courses = () => {
   const filteredCourses = allCourses.filter(course => {
     const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                       course.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "" || course.category === selectedCategory;
-    const matchesLevel = selectedLevel === "" || course.level === selectedLevel;
+    const matchesCategory = selectedCategory === "all" || course.category === selectedCategory;
+    const matchesLevel = selectedLevel === "all" || course.level === selectedLevel;
     const matchesPrice = course.price >= priceRange[0] && course.price <= priceRange[1];
     
     return matchesSearch && matchesCategory && matchesLevel && matchesPrice;
@@ -156,7 +156,7 @@ const Courses = () => {
                       <SelectValue placeholder="All Categories" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Categories</SelectItem>
+                      <SelectItem value="all">All Categories</SelectItem>
                       {categories.map(category => (
                         <SelectItem key={category} value={category}>{category}</SelectItem>
                       ))}
@@ -171,7 +171,7 @@ const Courses = () => {
                       <SelectValue placeholder="All Levels" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Levels</SelectItem>
+                      <SelectItem value="all">All Levels</SelectItem>
                       {levels.map(level => (
                         <SelectItem key={level} value={level}>{level}</SelectItem>
                       ))}
@@ -201,8 +201,8 @@ const Courses = () => {
                   className="w-full" 
                   onClick={() => {
                     setSearchTerm("");
-                    setSelectedCategory("");
-                    setSelectedLevel("");
+                    setSelectedCategory("all");
+                    setSelectedLevel("all");
                     setPriceRange([0, 200]);
                   }}
                 >
