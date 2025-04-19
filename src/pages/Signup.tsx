@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { GraduationCap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Signup = () => {
   const [fullName, setFullName] = useState("");
@@ -18,6 +19,7 @@ const Signup = () => {
   const [passwordError, setPasswordError] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const validateForm = () => {
     if (password !== confirmPassword) {
@@ -50,12 +52,15 @@ const Signup = () => {
       // Simulate successful registration
       toast({
         title: "Account created successfully",
-        description: "Welcome to L-earnings! You can now log in.",
+        description: "Welcome to L-earnings!",
       });
       
-      // In a real app, you'd register the user first
+      // Use our auth context to log in the user immediately after signup
+      login(email, { email, name: fullName });
+      
+      // Redirect to home page after successful signup
       setTimeout(() => {
-        navigate("/login"); // Redirect to login page
+        navigate("/");
       }, 1500);
     } catch (error) {
       toast({

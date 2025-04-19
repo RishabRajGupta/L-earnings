@@ -1,12 +1,13 @@
-
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Clock, 
   Calendar, 
@@ -43,7 +44,6 @@ interface Course {
   }[];
 }
 
-// Sample courses data
 const coursesData: Record<string, Course> = {
   "1": {
     id: "1",
@@ -164,6 +164,28 @@ const coursesData: Record<string, Course> = {
 const CourseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const course = coursesData[id as string];
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { isLoggedIn } = useAuth();
+
+  const handleEnroll = () => {
+    if (!isLoggedIn) {
+      toast({
+        title: "Please log in",
+        description: "You need to be logged in to enroll in a course",
+        variant: "destructive"
+      });
+      navigate("/login");
+      return;
+    }
+
+    toast({
+      title: "Enrollment Successful!",
+      description: `You are now enrolled in ${course.title}`,
+    });
+    
+    console.log(`User enrolled in course: ${course.title}`);
+  };
 
   if (!course) {
     return (
@@ -251,7 +273,12 @@ const CourseDetail: React.FC = () => {
                   </div>
                   
                   <div className="space-y-4">
-                    <Button className="w-full">Enroll Now</Button>
+                    <Button 
+                      className="w-full"
+                      onClick={handleEnroll}
+                    >
+                      Enroll Now
+                    </Button>
                     
                     <div className="space-y-3 text-sm">
                       <div className="flex items-center gap-2">
