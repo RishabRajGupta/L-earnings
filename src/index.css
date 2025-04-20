@@ -61,8 +61,11 @@
 
 @layer utilities {
   .glass {
-    @apply dark:bg-black/40 dark:backdrop-blur-lg dark:border dark:border-white/10 dark:shadow-xl
-           light:bg-white/40 light:backdrop-blur-lg light:border light:border-black/10 light:shadow-xl;
+    @apply bg-white/40 backdrop-blur-lg border border-black/10 shadow-xl;
+  }
+  
+  .dark .glass {
+    @apply bg-black/40 border-white/10;
   }
   
   .hover-scale {
