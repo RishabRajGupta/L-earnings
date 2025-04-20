@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -17,58 +18,58 @@ const mockTests = {
     questions: [
       {
         id: 1,
-        question: "What is React?",
+        question: "What is Python?",
         options: [
-          "A JavaScript library for building user interfaces",
-          "A programming language",
+          "A high-level programming language",
           "A database management system",
-          "An operating system"
+          "An operating system",
+          "A web browser"
         ],
         correctAnswer: 0
       },
       {
         id: 2,
-        question: "What hook is used for side effects in React?",
+        question: "Which of the following is a Python data type?",
         options: [
-          "useState",
-          "useEffect",
-          "useContext",
-          "useReducer"
+          "Integer",
+          "Float",
+          "String",
+          "All of the above"
+        ],
+        correctAnswer: 3
+      },
+      {
+        id: 3,
+        question: "How do you create a function in Python?",
+        options: [
+          "function myFunction():",
+          "def myFunction():",
+          "create myFunction():",
+          "func myFunction():"
         ],
         correctAnswer: 1
       },
       {
-        id: 3,
-        question: "Which of the following is NOT a JavaScript data type?",
+        id: 4,
+        question: "How do you create a comment in Python?",
         options: [
-          "String",
-          "Boolean",
-          "Integer",
-          "Object"
+          "// This is a comment",
+          "/* This is a comment */",
+          "# This is a comment",
+          "-- This is a comment"
         ],
         correctAnswer: 2
       },
       {
-        id: 4,
-        question: "What does JSX stand for?",
-        options: [
-          "JavaScript XML",
-          "JavaScript Extension",
-          "Java Syntax Extension",
-          "JavaScript eXecution"
-        ],
-        correctAnswer: 0
-      },
-      {
         id: 5,
-        question: "Which lifecycle method is called after a component renders?",
+        question: "Which of these is NOT a valid Python variable name?",
         options: [
-          "componentWillMount",
-          "componentDidMount",
-          "componentWillUpdate",
-          "componentDidUpdate"
+          "my_var",
+          "_myvar",
+          "1var",
+          "myVar"
         ],
-        correctAnswer: 1
+        correctAnswer: 2
       }
     ]
   },
@@ -76,432 +77,340 @@ const mockTests = {
     questions: [
       {
         id: 1,
-        question: "What is a closure in JavaScript?",
+        question: "What does HTML stand for?",
         options: [
-          "A way to close browser windows",
-          "A function that has access to variables in its outer lexical environment",
-          "A method to terminate JavaScript execution",
-          "A special type of object"
+          "Hyper Text Markup Language",
+          "High Tech Machine Learning",
+          "Hyperlinks and Text Markup Language",
+          "Home Tool Markup Language"
         ],
-        correctAnswer: 1
+        correctAnswer: 0
       },
       {
         id: 2,
-        question: "Which of these is not a JavaScript promise state?",
+        question: "Which CSS property is used to change the text color?",
         options: [
-          "Pending",
-          "Fulfilled",
-          "Rejected",
-          "Executing"
-        ],
-        correctAnswer: 3
-      },
-      {
-        id: 3,
-        question: "What does the 'this' keyword refer to in JavaScript?",
-        options: [
-          "The current function",
-          "The parent function",
-          "The object the function is a method of",
-          "The global window object"
+          "font-color",
+          "text-color",
+          "color",
+          "text-style"
         ],
         correctAnswer: 2
       },
       {
-        id: 4,
-        question: "Which array method does NOT modify the original array?",
+        id: 3,
+        question: "Which JavaScript method is used to remove the last element from an array?",
         options: [
+          "pop()",
           "push()",
-          "splice()",
-          "map()",
-          "sort()"
-        ],
-        correctAnswer: 2
-      },
-      {
-        id: 5,
-        question: "What is hoisting in JavaScript?",
-        options: [
-          "Raising exceptions",
-          "Lifting variables and function declarations to the top of their scope",
-          "Moving elements in the DOM",
-          "A deprecated feature in ES6"
-        ],
-        correctAnswer: 1
-      }
-    ]
-  },
-  "3": {
-    questions: [
-      {
-        id: 1,
-        question: "What is the primary purpose of R programming language?",
-        options: [
-          "Web development",
-          "Statistical computing and graphics",
-          "Game development",
-          "System programming"
-        ],
-        correctAnswer: 1
-      },
-      {
-        id: 2,
-        question: "Which package in R is used for creating visualizations?",
-        options: [
-          "dplyr",
-          "tidyr",
-          "ggplot2",
-          "readr"
-        ],
-        correctAnswer: 2
-      },
-      {
-        id: 3,
-        question: "What function is used to read CSV files in R?",
-        options: [
-          "read.csv()",
-          "import.csv()",
-          "load.csv()",
-          "get.csv()"
+          "shift()",
+          "unshift()"
         ],
         correctAnswer: 0
       },
       {
         id: 4,
-        question: "Which of the following is NOT a data structure in R?",
+        question: "Which of these is NOT a valid way to declare a variable in JavaScript?",
         options: [
-          "Vector",
-          "Matrix",
-          "Dictionary",
-          "Data Frame"
-        ],
-        correctAnswer: 2
-      },
-      {
-        id: 5,
-        question: "What is the purpose of the '%>%' operator in R?",
-        options: [
-          "Division",
-          "Matrix multiplication",
-          "Logical OR",
-          "Pipe operator for chaining functions"
-        ],
-        correctAnswer: 3
-      }
-    ]
-  },
-  "4": {
-    questions: [
-      {
-        id: 1,
-        question: "What does UI stand for in UI/UX design?",
-        options: [
-          "User Interface",
-          "User Interaction",
-          "Usable Interface",
-          "User Implementation"
-        ],
-        correctAnswer: 0
-      },
-      {
-        id: 2,
-        question: "Which of the following is a key principle of good UI design?",
-        options: [
-          "Making interfaces as complex as possible",
-          "Using as many different colors as possible",
-          "Consistency",
-          "Avoiding white space"
-        ],
-        correctAnswer: 2
-      },
-      {
-        id: 3,
-        question: "What is the purpose of a wireframe in design?",
-        options: [
-          "To create the final visual design",
-          "To outline the structure and layout",
-          "To test the website performance",
-          "To write the code for the website"
-        ],
-        correctAnswer: 1
-      },
-      {
-        id: 4,
-        question: "What is 'affordance' in UI design?",
-        options: [
-          "The cost of developing a UI",
-          "A quality that indicates how an element should be used",
-          "The time it takes to load a UI",
-          "The number of elements on a screen"
-        ],
-        correctAnswer: 1
-      },
-      {
-        id: 5,
-        question: "What is the primary goal of user experience (UX) design?",
-        options: [
-          "To make websites look visually appealing",
-          "To create the most technologically advanced websites",
-          "To optimize user satisfaction",
-          "To reduce development costs"
-        ],
-        correctAnswer: 2
-      }
-    ]
-  },
-  "5": {
-    questions: [
-      {
-        id: 1,
-        question: "What is the primary goal of digital marketing?",
-        options: [
-          "To increase website traffic",
-          "To promote products or services through digital channels",
-          "To create viral content",
-          "To design websites"
-        ],
-        correctAnswer: 1
-      },
-      {
-        id: 2,
-        question: "What does SEO stand for?",
-        options: [
-          "Search Engine Optimization",
-          "Search Engine Operation",
-          "Search Enhancement Options",
-          "Social Engagement Opportunities"
-        ],
-        correctAnswer: 0
-      },
-      {
-        id: 3,
-        question: "Which of the following is NOT a social media platform?",
-        options: [
-          "Instagram",
-          "Twitter",
-          "Facebook",
-          "AdWords"
+          "var x = 5;",
+          "let y = 10;",
+          "const z = 15;",
+          "variable w = 20;"
         ],
         correctAnswer: 3
       },
       {
-        id: 4,
-        question: "What is a key performance indicator (KPI) in marketing?",
-        options: [
-          "A type of marketing software",
-          "A measurable value that demonstrates how effectively a company is achieving key business objectives",
-          "A coding language for marketing websites",
-          "A type of digital advertisement"
-        ],
-        correctAnswer: 1
-      },
-      {
         id: 5,
-        question: "What is the purpose of A/B testing in marketing?",
+        question: "What is the correct CSS syntax for making all paragraph elements bold?",
         options: [
-          "To test website security",
-          "To compare two versions of something to determine which performs better",
-          "To analyze competitor websites",
-          "To create backup copies of marketing materials"
+          "p {text-weight: bold;}",
+          "p {font-weight: bold;}",
+          "<p style='font-size: bold;'>",
+          "p.all {font-weight: bold;}"
         ],
         correctAnswer: 1
-      }
-    ]
-  },
-  "6": {
-    questions: [
-      {
-        id: 1,
-        question: "What is machine learning?",
-        options: [
-          "A type of computer hardware",
-          "The ability of computers to learn without being explicitly programmed",
-          "A programming language",
-          "A database management system"
-        ],
-        correctAnswer: 1
-      },
-      {
-        id: 2,
-        question: "Which of the following is a supervised learning algorithm?",
-        options: [
-          "K-means clustering",
-          "Principal Component Analysis",
-          "Linear Regression",
-          "Association Rules"
-        ],
-        correctAnswer: 2
-      },
-      {
-        id: 3,
-        question: "What is an epoch in machine learning?",
-        options: [
-          "A type of neural network",
-          "A complete pass through the entire training dataset",
-          "A evaluation metric",
-          "A programming error"
-        ],
-        correctAnswer: 1
-      },
-      {
-        id: 4,
-        question: "What is overfitting in machine learning?",
-        options: [
-          "When a model performs well on training data but poorly on unseen data",
-          "When a model is too simple to capture patterns in the data",
-          "When a model is trained on too much data",
-          "When a model runs too slowly"
-        ],
-        correctAnswer: 0
-      },
-      {
-        id: 5,
-        question: "Which of the following is NOT a common machine learning algorithm?",
-        options: [
-          "Random Forest",
-          "Neural Networks",
-          "Support Vector Machines",
-          "Sequential Markup"
-        ],
-        correctAnswer: 3
       }
     ]
   }
 };
 
-// Update mock course data with rupee prices
-const mockCourses = {
-  "1": { price: 4999, title: "Introduction to React" },
-  "2": { price: 7499, title: "Advanced JavaScript Concepts" },
-  "3": { price: 6499, title: "Data Science with R" },
-  "4": { price: 4499, title: "UI/UX Design Principles" },
-  "5": { price: 5999, title: "Digital Marketing Strategy" },
-  "6": { price: 7499, title: "Machine Learning Fundamentals" }
-};
-
-const FinalTest = () => {
+const FinalTest: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
   const { toast } = useToast();
-  const [answers, setAnswers] = React.useState<Record<number, number>>({});
-  const [testCompleted, setTestCompleted] = React.useState(false);
+  
+  const [testData, setTestData] = React.useState<any>(null);
+  const [selectedAnswers, setSelectedAnswers] = React.useState<number[]>([]);
+  const [currentQuestion, setCurrentQuestion] = React.useState(0);
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [score, setScore] = React.useState(0);
+  const [courseTitle, setCourseTitle] = React.useState('');
+  const [coursePrice, setCoursePrice] = React.useState(0);
+  const [courseData, setCourseData] = React.useState<any>(null);
   const [refundAmount, setRefundAmount] = React.useState(0);
-
+  
+  // Check if user is logged in and enrolled in the course
   React.useEffect(() => {
     if (!isLoggedIn) {
-      navigate("/login");
-    }
-  }, [isLoggedIn, navigate]);
-
-  const courseId = id || "1";
-  const courseTitle = mockCourses[courseId as keyof typeof mockCourses]?.title || "Course";
-  const coursePrice = mockCourses[courseId as keyof typeof mockCourses]?.price || 0;
-  const testQuestions = mockTests[courseId as keyof typeof mockTests]?.questions || [];
-
-  const handleSubmit = () => {
-    const totalQuestions = testQuestions.length;
-    const correctAnswers = testQuestions.reduce((acc, question) => {
-      return answers[question.id] === question.correctAnswer ? acc + 1 : acc;
-    }, 0);
-    
-    const scorePercentage = Math.round((correctAnswers / totalQuestions) * 100);
-    const calculatedRefund = (scorePercentage / 100) * coursePrice;
-    
-    setScore(scorePercentage);
-    setRefundAmount(calculatedRefund);
-    setTestCompleted(true);
-    
-    // Save test results to localStorage
-    try {
-      // Get the enrolled courses
-      const storedCoursesString = localStorage.getItem('enrolledCourses');
-      let storedCourses = [];
-      
-      if (storedCoursesString) {
-        storedCourses = JSON.parse(storedCoursesString);
-      }
-      
-      // Update the course with test results
-      const updatedCourses = storedCourses.map((course: any) => {
-        if (course.id === parseInt(courseId)) {
-          return {
-            ...course,
-            hasTakenTest: true,
-            testScore: scorePercentage
-          };
-        }
-        return course;
-      });
-      
-      // Save the updated courses back to localStorage
-      localStorage.setItem('enrolledCourses', JSON.stringify(updatedCourses));
-      
-      // Dispatch a storage event to notify other tabs
-      window.dispatchEvent(new Event('storage'));
-      
       toast({
-        title: "Test completed!",
-        description: `You scored ${scorePercentage}% and earned a refund of ₹${calculatedRefund.toFixed(2)}`,
-      });
-    } catch (error) {
-      console.error("Error saving test results:", error);
-      toast({
-        title: "Error",
-        description: "Failed to save your test results",
+        title: "Please log in",
+        description: "You need to be logged in to take this test",
         variant: "destructive"
       });
+      navigate("/login");
+      return;
+    }
+    
+    // Get enrolled courses from local storage
+    const storedCoursesString = localStorage.getItem('enrolledCourses');
+    if (!storedCoursesString) {
+      toast({
+        title: "Not enrolled",
+        description: "You are not enrolled in any courses",
+        variant: "destructive"
+      });
+      navigate("/courses");
+      return;
+    }
+    
+    try {
+      const storedCourses = JSON.parse(storedCoursesString);
+      const enrolledCourse = storedCourses.find((course: any) => course.id === id);
+      
+      if (!enrolledCourse) {
+        toast({
+          title: "Not enrolled",
+          description: "You are not enrolled in this course",
+          variant: "destructive"
+        });
+        navigate("/courses");
+        return;
+      }
+      
+      // Check if test is already taken
+      if (enrolledCourse.hasTakenTest) {
+        toast({
+          title: "Test already taken",
+          description: "You have already taken the final test for this course",
+          variant: "default"
+        });
+        navigate("/my-courses");
+        return;
+      }
+      
+      // Store course data
+      setCourseTitle(enrolledCourse.title);
+      setCoursePrice(enrolledCourse.price);
+      setCourseData(enrolledCourse);
+      
+      // Get test data from mock data
+      const test = mockTests[id as keyof typeof mockTests];
+      if (test) {
+        setTestData(test);
+        setSelectedAnswers(new Array(test.questions.length).fill(-1));
+      } else {
+        toast({
+          title: "Test not found",
+          description: "The final test for this course is not available",
+          variant: "destructive"
+        });
+        navigate(`/courses/${id}`);
+      }
+    } catch (error) {
+      console.error("Error loading test data:", error);
+      toast({
+        title: "Error",
+        description: "There was an error loading the test",
+        variant: "destructive"
+      });
+      navigate("/courses");
+    }
+  }, [id, isLoggedIn, navigate, toast]);
+  
+  const handleAnswerSelect = (questionIndex: number, answerIndex: number) => {
+    if (isSubmitted) return;
+    
+    const newSelectedAnswers = [...selectedAnswers];
+    newSelectedAnswers[questionIndex] = answerIndex;
+    setSelectedAnswers(newSelectedAnswers);
+  };
+  
+  const handleNextQuestion = () => {
+    if (currentQuestion < testData.questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
     }
   };
-
-  // Test summary screen
-  if (testCompleted) {
+  
+  const handlePreviousQuestion = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+    }
+  };
+  
+  const handleSubmit = () => {
+    // Check if all questions are answered
+    const unansweredQuestions = selectedAnswers.filter(answer => answer === -1).length;
+    
+    if (unansweredQuestions > 0) {
+      toast({
+        title: "Incomplete test",
+        description: `You have ${unansweredQuestions} unanswered questions`,
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Calculate score
+    let correctAnswers = 0;
+    testData.questions.forEach((question: any, index: number) => {
+      if (selectedAnswers[index] === question.correctAnswer) {
+        correctAnswers++;
+      }
+    });
+    
+    const scorePercentage = Math.round((correctAnswers / testData.questions.length) * 100);
+    setScore(scorePercentage);
+    
+    // Calculate refund
+    const refund = (scorePercentage / 100) * coursePrice;
+    setRefundAmount(refund);
+    
+    // Update local storage with test results
+    const storedCoursesString = localStorage.getItem('enrolledCourses');
+    if (storedCoursesString) {
+      try {
+        const storedCourses = JSON.parse(storedCoursesString);
+        const updatedCourses = storedCourses.map((course: any) => {
+          if (course.id === id) {
+            return {
+              ...course,
+              hasTakenTest: true,
+              testScore: scorePercentage,
+              refundAmount: refund,
+              // Ensure all course data is preserved
+              price: coursePrice,
+              title: courseTitle
+            };
+          }
+          return course;
+        });
+        
+        localStorage.setItem('enrolledCourses', JSON.stringify(updatedCourses));
+        
+        // Trigger storage event for dashboard and other components
+        window.dispatchEvent(new Event('storage'));
+      } catch (error) {
+        console.error("Error updating test results:", error);
+      }
+    }
+    
+    setIsSubmitted(true);
+    
+    toast({
+      title: "Test Submitted",
+      description: `You scored ${scorePercentage}% and earned a refund of ₹${refund.toFixed(2)}`,
+    });
+  };
+  
+  if (!testData) {
     return (
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="flex-1 container mx-auto px-4 py-8">
-          <Card className="max-w-3xl mx-auto glass hover-glow">
+        <main className="flex-1 container px-4 md:px-6 py-12 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold mb-4">Loading Test</h1>
+            <p className="mb-6">Please wait while we load your final assessment.</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+  
+  if (isSubmitted) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-1 container px-4 md:px-6 py-12 flex items-center justify-center">
+          <Card className="w-full max-w-3xl glass">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl">Test Completed!</CardTitle>
+              <CardTitle className="text-2xl">Test Results</CardTitle>
+              <p className="text-muted-foreground">
+                {courseTitle} Final Assessment
+              </p>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-8">
               <div className="flex flex-col items-center">
-                <div className="flex items-center justify-center w-32 h-32 rounded-full bg-primary/10 mb-4">
-                  {score >= 90 ? (
-                    <Award className="h-16 w-16 text-primary" />
-                  ) : (
-                    <CheckCircle className="h-16 w-16 text-primary" />
-                  )}
-                </div>
-                
-                <h2 className="text-4xl font-bold mb-2">{score}%</h2>
-                <p className="text-muted-foreground mb-6">Your final score</p>
-                
-                <div className="w-full max-w-md mb-4">
-                  <Progress value={score} className="h-4" />
-                </div>
-                
-                <div className="bg-muted p-6 rounded-lg w-full max-w-md text-center space-y-2">
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    <PiggyBank className="h-5 w-5 text-primary" />
-                    <h3 className="font-semibold">Your Refund</h3>
+                <div className="mb-4">
+                  <div className="relative inline-flex">
+                    <div className="w-32 h-32 rounded-full bg-muted flex items-center justify-center">
+                      <span className="text-4xl font-bold">{score}%</span>
+                    </div>
+                    {score >= 90 ? (
+                      <div className="absolute -top-2 -right-2 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full p-1">
+                        <CheckCircle className="h-6 w-6" />
+                      </div>
+                    ) : null}
                   </div>
-                  <p className="text-3xl font-bold">₹{refundAmount.toFixed(2)}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {score}% of your course fee (₹{coursePrice.toFixed(2)})
-                  </p>
-                  {score >= 90 && (
-                    <p className="mt-2 text-sm font-medium text-primary">
-                      Congratulations! You've earned a significant refund!
-                    </p>
-                  )}
+                </div>
+                <p className="text-xl font-medium">
+                  {score >= 90 ? "Excellent!" : score >= 70 ? "Good Job!" : "Keep Learning!"}
+                </p>
+                <p className="text-muted-foreground">
+                  You answered {selectedAnswers.filter((answer, index) => answer === testData.questions[index].correctAnswer).length} out of {testData.questions.length} questions correctly.
+                </p>
+              </div>
+              
+              <div className="space-y-4 bg-muted/30 p-6 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-medium flex items-center gap-2">
+                      <PiggyBank className="h-5 w-5 text-primary" />
+                      Refund Details
+                    </h3>
+                    <p className="text-sm text-muted-foreground">Based on your score of {score}%</p>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span>Course Price:</span>
+                    <span>₹{coursePrice.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between font-medium text-primary">
+                    <span>Your Refund ({score}%):</span>
+                    <span>₹{refundAmount.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between font-bold pt-2 border-t">
+                    <span>Final Cost:</span>
+                    <span>₹{(coursePrice - refundAmount).toFixed(2)}</span>
+                  </div>
                 </div>
               </div>
+              
+              <div className="bg-muted/30 p-6 rounded-lg">
+                <h3 className="font-medium flex items-center gap-2 mb-3">
+                  <Award className="h-5 w-5 text-primary" />
+                  Certificate
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {score >= 60 ? 
+                    "Congratulations! You've qualified for a certificate of completion." : 
+                    "You need a score of at least 60% to qualify for a certificate."}
+                </p>
+                <Button 
+                  className="w-full" 
+                  disabled={score < 60}
+                  variant={score >= 60 ? "default" : "outline"}
+                >
+                  {score >= 60 ? "Download Certificate" : "Certificate Unavailable"}
+                </Button>
+              </div>
             </CardContent>
-            <CardFooter className="flex justify-center">
-              <Button onClick={() => navigate(`/my-courses`)}>
-                Back to My Courses
+            <CardFooter>
+              <Button onClick={() => navigate("/my-courses")} className="w-full">
+                Return to My Courses
               </Button>
             </CardFooter>
           </Card>
@@ -510,57 +419,84 @@ const FinalTest = () => {
       </div>
     );
   }
-
-  // Test questions screen
+  
+  const currentQuestionData = testData.questions[currentQuestion];
+  
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <Card className="max-w-3xl mx-auto glass hover-glow">
-          <CardHeader>
-            <CardTitle>{courseTitle}: Final Test</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {testQuestions.map((question, index) => (
-              <div key={question.id} className="space-y-4">
-                <h3 className="font-medium">
-                  {index + 1}. {question.question}
-                </h3>
-                <RadioGroup
-                  value={answers[question.id]?.toString()}
-                  onValueChange={(value) =>
-                    setAnswers((prev) => ({
-                      ...prev,
-                      [question.id]: parseInt(value)
-                    }))
-                  }
-                >
-                  {question.options.map((option, optionIndex) => (
-                    <div key={optionIndex} className="flex items-center space-x-2">
-                      <RadioGroupItem value={optionIndex.toString()} id={`q${question.id}-${optionIndex}`} />
-                      <Label htmlFor={`q${question.id}-${optionIndex}`}>{option}</Label>
-                    </div>
-                  ))}
-                </RadioGroup>
+      <main className="flex-1 container px-4 md:px-6 py-12">
+        <div className="max-w-3xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold">Final Assessment: {courseTitle}</h1>
+            <p className="text-muted-foreground">
+              Complete this assessment to test your knowledge and earn your performance-based refund.
+            </p>
+          </div>
+          
+          <Card className="glass">
+            <CardHeader>
+              <div className="flex items-center justify-between mb-4">
+                <span className="font-semibold">
+                  Question {currentQuestion + 1} of {testData.questions.length}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {selectedAnswers.filter(a => a !== -1).length} of {testData.questions.length} answered
+                </span>
               </div>
-            ))}
-
-            <div className="mt-4 p-4 bg-muted/50 rounded-lg">
-              <p className="text-sm">
-                <strong>Remember:</strong> Your test score determines your refund. Score 90% or higher to get up to 90% of your course fee back!
-              </p>
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button
-              onClick={handleSubmit}
-              className="w-full"
-              disabled={Object.keys(answers).length !== testQuestions.length}
-            >
-              Submit Test
-            </Button>
-          </CardFooter>
-        </Card>
+              <Progress 
+                value={(currentQuestion + 1) / testData.questions.length * 100} 
+                className="h-2"
+              />
+            </CardHeader>
+            <CardContent className="pt-6">
+              <div className="space-y-6">
+                <div>
+                  <h2 className="text-xl font-medium mb-4">
+                    {currentQuestionData.question}
+                  </h2>
+                  
+                  <RadioGroup
+                    value={selectedAnswers[currentQuestion].toString()}
+                    onValueChange={(value) => handleAnswerSelect(currentQuestion, parseInt(value))}
+                    className="space-y-4"
+                  >
+                    {currentQuestionData.options.map((option: string, index: number) => (
+                      <div key={index} className="flex items-center space-x-2">
+                        <RadioGroupItem id={`q${currentQuestion}-option${index}`} value={index.toString()} />
+                        <Label htmlFor={`q${currentQuestion}-option${index}`} className="cursor-pointer">
+                          {option}
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Button
+                variant="outline"
+                onClick={handlePreviousQuestion}
+                disabled={currentQuestion === 0}
+              >
+                Previous
+              </Button>
+              
+              {currentQuestion < testData.questions.length - 1 ? (
+                <Button onClick={handleNextQuestion}>
+                  Next
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleSubmit}
+                  variant="default"
+                >
+                  Submit Test
+                </Button>
+              )}
+            </CardFooter>
+          </Card>
+        </div>
       </main>
       <Footer />
     </div>

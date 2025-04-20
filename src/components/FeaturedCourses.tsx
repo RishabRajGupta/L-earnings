@@ -46,7 +46,7 @@ const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
             <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
             <span className="text-sm font-medium">{course.rating.toFixed(1)}</span>
           </div>
-          <div className="text-lg font-bold">${course.price.toFixed(2)}</div>
+          <div className="text-lg font-bold">₹{course.price.toFixed(2)}</div>
         </CardFooter>
       </Card>
     </Link>
@@ -54,13 +54,13 @@ const CourseCard: React.FC<{ course: Course }> = ({ course }) => {
 };
 
 const FeaturedCourses: React.FC = () => {
-  // Sample course data
+  // Sample course data with updated prices
   const courses: Course[] = [
     {
       id: "1",
       title: "Python Programming Fundamentals",
       description: "Learn the basics of Python programming language and build your first applications.",
-      price: 99.99,
+      price: 5999.99,
       category: "Programming",
       level: "Beginner",
       image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&q=80&w=600",
@@ -70,7 +70,7 @@ const FeaturedCourses: React.FC = () => {
       id: "2",
       title: "Web Development Bootcamp",
       description: "Master HTML, CSS, and JavaScript to create modern and responsive websites.",
-      price: 149.99,
+      price: 8999.99,
       category: "Web Development",
       level: "Intermediate",
       image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=600",
@@ -80,7 +80,7 @@ const FeaturedCourses: React.FC = () => {
       id: "3",
       title: "Data Science with R",
       description: "Analyze data, create visualizations, and build predictive models using R.",
-      price: 129.99,
+      price: 7599.99,
       category: "Data Science",
       level: "Advanced",
       image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80&w=600",

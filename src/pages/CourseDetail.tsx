@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
@@ -49,7 +50,7 @@ const coursesData: Record<string, Course> = {
     id: "1",
     title: "Python Programming Fundamentals",
     description: "Learn the foundations of Python programming in this comprehensive course. You'll start with the basics and progress to building complete applications. Python is one of the most versatile and in-demand programming languages in the world, used for everything from web development to data science and machine learning.",
-    price: 99.99,
+    price: 5999.99,
     category: "Programming",
     level: "Beginner",
     image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&q=80&w=1200",
@@ -107,7 +108,7 @@ const coursesData: Record<string, Course> = {
     id: "2",
     title: "Web Development Bootcamp",
     description: "Master HTML, CSS, and JavaScript to create modern and responsive websites.",
-    price: 149.99,
+    price: 8999.99,
     category: "Web Development",
     level: "Intermediate",
     image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=1200",
@@ -175,7 +176,7 @@ const CourseDetail: React.FC = () => {
       if (storedCourses) {
         try {
           const parsedCourses = JSON.parse(storedCourses);
-          const enrolled = parsedCourses.some((course: any) => course.id === parseInt(id));
+          const enrolled = parsedCourses.some((course: any) => course.id === id);
           setIsEnrolled(enrolled);
         } catch (error) {
           console.error("Error parsing enrolled courses:", error);
@@ -208,14 +209,17 @@ const CourseDetail: React.FC = () => {
         enrolledCourses = JSON.parse(storedCourses);
       }
       
-      if (!enrolledCourses.some((c: any) => c.id === parseInt(id as string))) {
+      if (!enrolledCourses.some((c: any) => c.id === id)) {
         enrolledCourses.push({
-          id: parseInt(id as string),
+          id: id,
           title: course.title,
           description: course.description,
           price: course.price,
           image: course.image,
-          category: course.category
+          category: course.category,
+          hasTakenTest: false,
+          testScore: null,
+          progress: "0%"
         });
         
         localStorage.setItem('enrolledCourses', JSON.stringify(enrolledCourses));
@@ -315,7 +319,7 @@ const CourseDetail: React.FC = () => {
                   </div>
                   
                   <div className="mb-4">
-                    <p className="text-3xl font-bold">${course.price.toFixed(2)}</p>
+                    <p className="text-3xl font-bold">₹{course.price.toFixed(2)}</p>
                     <div className="mt-2 flex items-center gap-2 text-primary">
                       <PiggyBank className="h-5 w-5" />
                       <p className="font-medium">Performance-based refund available</p>

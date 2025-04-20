@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -28,7 +29,7 @@ const Courses = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedLevel, setSelectedLevel] = useState("all");
-  const [priceRange, setPriceRange] = useState([0, 200]);
+  const [priceRange, setPriceRange] = useState([5000, 10000]);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -36,13 +37,13 @@ const Courses = () => {
   const categories = ["Programming", "Web Development", "Data Science", "Design", "Marketing", "Business"];
   const levels = ["Beginner", "Intermediate", "Advanced"];
 
-  // Updated course data with consistent information and materials
+  // Updated course data with consistent information, materials, and adjusted prices
   const allCourses: Course[] = [
     {
       id: "1",
       title: "Python Programming Fundamentals",
       description: "Learn the basics of Python programming language and build your first applications.",
-      price: 99.99,
+      price: 5999.99,
       category: "Programming",
       level: "Beginner",
       image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&q=80&w=600",
@@ -67,7 +68,7 @@ const Courses = () => {
       id: "2",
       title: "Web Development Bootcamp",
       description: "Master HTML, CSS, and JavaScript to create modern and responsive websites.",
-      price: 149.99,
+      price: 8999.99,
       category: "Web Development",
       level: "Intermediate",
       image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=600",
@@ -92,7 +93,7 @@ const Courses = () => {
       id: "3",
       title: "Data Science with R",
       description: "Analyze data, create visualizations, and build predictive models using R.",
-      price: 129.99,
+      price: 7599.99,
       category: "Data Science",
       level: "Advanced",
       image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80&w=600",
@@ -117,7 +118,7 @@ const Courses = () => {
       id: "4",
       title: "UI/UX Design Principles",
       description: "Learn the fundamentals of user interface and user experience design.",
-      price: 89.99,
+      price: 6499.99,
       category: "Design",
       level: "Beginner",
       image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600",
@@ -142,7 +143,7 @@ const Courses = () => {
       id: "5",
       title: "Digital Marketing Strategy",
       description: "Develop comprehensive digital marketing strategies for business growth.",
-      price: 119.99,
+      price: 7299.99,
       category: "Marketing",
       level: "Intermediate",
       image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&q=80&w=600",
@@ -167,7 +168,7 @@ const Courses = () => {
       id: "6",
       title: "Machine Learning Fundamentals",
       description: "Introduction to machine learning algorithms and their applications.",
-      price: 149.99,
+      price: 9499.99,
       category: "Data Science",
       level: "Advanced",
       image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=600",
@@ -215,7 +216,7 @@ const Courses = () => {
         return;
       }
       
-      // Add course to enrolled courses
+      // Add course to enrolled courses - ensure price is stored correctly
       const courseToAdd = {
         id: course.id,
         title: course.title,
@@ -224,7 +225,9 @@ const Courses = () => {
         hasTakenTest: false,
         testScore: null,
         description: course.description,
-        materials: course.materials || []
+        materials: course.materials || [],
+        category: course.category,
+        image: course.image
       };
       
       storedCourses.push(courseToAdd);
@@ -331,15 +334,16 @@ const Courses = () => {
                   <label className="text-sm font-medium mb-2 block">Price Range</label>
                   <div className="pt-4 px-2">
                     <Slider 
-                      defaultValue={[0, 200]} 
-                      max={200} 
-                      step={5} 
+                      defaultValue={[5000, 10000]} 
+                      max={10000} 
+                      min={5000}
+                      step={500} 
                       value={priceRange}
                       onValueChange={setPriceRange}
                     />
                     <div className="flex justify-between mt-2 text-sm">
-                      <span>${priceRange[0]}</span>
-                      <span>${priceRange[1]}</span>
+                      <span>₹{priceRange[0]}</span>
+                      <span>₹{priceRange[1]}</span>
                     </div>
                   </div>
                 </div>
@@ -351,7 +355,7 @@ const Courses = () => {
                     setSearchTerm("");
                     setSelectedCategory("all");
                     setSelectedLevel("all");
-                    setPriceRange([0, 200]);
+                    setPriceRange([5000, 10000]);
                   }}
                 >
                   Reset Filters
