@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,10 +12,10 @@ const Dashboard = () => {
   const { isLoggedIn, userInfo } = useAuth();
   const navigate = useNavigate();
   
-  // Mock data - In a real app, this would come from your backend
+  // Mock data with rupee values
   const enrolledCoursesCount = 2;
   const completedCoursesCount = 1;
-  const totalRefund = 149.99;
+  const totalRefund = 7499;
   const avgTestScore = 85;
   
   const chartData = [
@@ -101,7 +100,7 @@ const Dashboard = () => {
             <CardContent>
               <div className="flex items-center">
                 <PiggyBank className="h-5 w-5 text-primary mr-2" />
-                <div className="text-2xl font-bold">${totalRefund.toFixed(2)}</div>
+                <div className="text-2xl font-bold">₹{totalRefund.toFixed(2)}</div>
               </div>
             </CardContent>
           </Card>
@@ -175,7 +174,7 @@ const Dashboard = () => {
                   <div>
                     <p className="font-medium">Refund Processed</p>
                     <p className="text-sm text-muted-foreground">Web Development Bootcamp</p>
-                    <p className="text-sm text-muted-foreground">Amount: $149.99</p>
+                    <p className="text-sm text-muted-foreground">Amount: ₹149.99</p>
                   </div>
                   <div className="ml-auto text-sm text-muted-foreground">
                     1 week ago

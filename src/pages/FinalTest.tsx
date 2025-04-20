@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -370,14 +369,14 @@ const mockTests = {
   }
 };
 
-// Mock course data
+// Update mock course data with rupee prices
 const mockCourses = {
-  "1": { price: 99.99, title: "Introduction to React" },
-  "2": { price: 149.99, title: "Advanced JavaScript Concepts" },
-  "3": { price: 129.99, title: "Data Science with R" },
-  "4": { price: 89.99, title: "UI/UX Design Principles" },
-  "5": { price: 119.99, title: "Digital Marketing Strategy" },
-  "6": { price: 149.99, title: "Machine Learning Fundamentals" }
+  "1": { price: 4999, title: "Introduction to React" },
+  "2": { price: 7499, title: "Advanced JavaScript Concepts" },
+  "3": { price: 6499, title: "Data Science with R" },
+  "4": { price: 4499, title: "UI/UX Design Principles" },
+  "5": { price: 5999, title: "Digital Marketing Strategy" },
+  "6": { price: 7499, title: "Machine Learning Fundamentals" }
 };
 
 const FinalTest = () => {
@@ -463,7 +462,7 @@ const FinalTest = () => {
   // Test summary screen
   if (testCompleted) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-background text-foreground">
         <Navbar />
         <main className="flex-1 container mx-auto px-4 py-8">
           <Card className="max-w-3xl mx-auto">
@@ -492,9 +491,9 @@ const FinalTest = () => {
                     <PiggyBank className="h-5 w-5 text-primary" />
                     <h3 className="font-semibold">Your Refund</h3>
                   </div>
-                  <p className="text-3xl font-bold">${refundAmount.toFixed(2)}</p>
+                  <p className="text-3xl font-bold">₹{refundAmount.toFixed(2)}</p>
                   <p className="text-sm text-muted-foreground">
-                    {score}% of your course fee (${coursePrice.toFixed(2)})
+                    {score}% of your course fee (₹{coursePrice.toFixed(2)})
                   </p>
                   {score >= 90 && (
                     <p className="mt-2 text-sm font-medium text-primary">
@@ -504,12 +503,9 @@ const FinalTest = () => {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="flex justify-center gap-4">
-              <Button variant="outline" onClick={() => navigate(`/my-courses`)}>
+            <CardFooter className="flex justify-center">
+              <Button onClick={() => navigate(`/my-courses`)}>
                 Back to My Courses
-              </Button>
-              <Button onClick={() => navigate(`/courses/${id}`)}>
-                Course Details
               </Button>
             </CardFooter>
           </Card>

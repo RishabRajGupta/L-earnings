@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,11 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, BookOpen, Award } from "lucide-react";
 
-// Updated mock data to track test results
 const mockEnrolledCourses = [
   {
     id: 1,
     title: "Introduction to React",
+    price: 4999,
     progress: "80%",
     hasTakenTest: false,
     testScore: null,
@@ -35,6 +34,7 @@ const mockEnrolledCourses = [
   {
     id: 2,
     title: "Advanced JavaScript Concepts",
+    price: 7499,
     progress: "60%",
     hasTakenTest: true,
     testScore: 85,
@@ -67,15 +67,12 @@ const MyCourses = () => {
       navigate("/login");
     }
     
-    // Retrieve enrolled courses from localStorage
     const storedCourses = localStorage.getItem('enrolledCourses');
     if (storedCourses) {
       try {
         const parsedCourses = JSON.parse(storedCourses);
-        // Merge with mock data to ensure we have all the necessary properties
         const mergedCourses = [...mockEnrolledCourses];
         
-        // Add any courses from localStorage that aren't in our mock data
         parsedCourses.forEach((storedCourse: any) => {
           if (!mergedCourses.some(course => course.id === storedCourse.id)) {
             mergedCourses.push({
@@ -104,12 +101,10 @@ const MyCourses = () => {
     }
   }, [isLoggedIn, navigate]);
 
-  // Get the selected course data
   const courseData = selectedCourse !== null 
     ? enrolledCourses.find(course => course.id === selectedCourse) 
     : null;
 
-  // If a course is selected, show its details and materials
   if (selectedCourse !== null && courseData) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -186,7 +181,6 @@ const MyCourses = () => {
     );
   }
 
-  // Otherwise show the list of enrolled courses
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -228,14 +222,12 @@ const MyCourses = () => {
                     View Course Materials
                   </Button>
                   {course.hasTakenTest ? (
-                    <Button
-                      onClick={() => navigate(`/courses/${course.id}/test`)}
-                      className="w-full"
-                      variant="secondary"
-                    >
-                      <FileText className="mr-2 h-4 w-4" />
-                      Score: {course.testScore}% - Retake Test
-                    </Button>
+                    <div className="w-full text-center p-2 bg-muted rounded-md">
+                      <div className="flex items-center justify-center gap-2">
+                        <Award className="h-4 w-4 text-primary" />
+                        <span>Final Score: {course.testScore}%</span>
+                      </div>
+                    </div>
                   ) : (
                     <Button
                       onClick={() => navigate(`/courses/${course.id}/test`)}
