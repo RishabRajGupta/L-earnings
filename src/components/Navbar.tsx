@@ -2,7 +2,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { GraduationCap, User, LogOut } from "lucide-react";
+import { GraduationCap, User, LogOut, BookOpen, LayoutDashboard } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   DropdownMenu,
@@ -45,9 +45,14 @@ const Navbar: React.FC = () => {
             About
           </Link>
           {isLoggedIn && (
-            <Link to="/my-courses" className="text-sm font-medium hover:text-primary transition-colors">
-              My Courses
-            </Link>
+            <>
+              <Link to="/my-courses" className="text-sm font-medium hover:text-primary transition-colors">
+                My Courses
+              </Link>
+              <Link to="/dashboard" className="text-sm font-medium hover:text-primary transition-colors">
+                Dashboard
+              </Link>
+            </>
           )}
         </nav>
         <div className="flex items-center gap-2">
@@ -63,13 +68,22 @@ const Navbar: React.FC = () => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link to="/dashboard" className="w-full">Dashboard</Link>
+                  <Link to="/dashboard" className="w-full flex items-center gap-2">
+                    <LayoutDashboard className="h-4 w-4" />
+                    Dashboard
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/profile" className="w-full">Profile</Link>
+                  <Link to="/profile" className="w-full flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    Profile
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link to="/my-courses" className="w-full">My Courses</Link>
+                  <Link to="/my-courses" className="w-full flex items-center gap-2">
+                    <BookOpen className="h-4 w-4" />
+                    My Courses
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} className="text-destructive">

@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -7,13 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, BookOpen, Award } from "lucide-react";
 
-// Mock data - In a real app, this would come from your backend
+// Updated mock data to track test results
 const mockEnrolledCourses = [
   {
     id: 1,
     title: "Introduction to React",
     progress: "80%",
     hasTakenTest: false,
+    testScore: null,
     description: "Learn the foundations of React",
     materials: [
       { 
@@ -34,7 +36,8 @@ const mockEnrolledCourses = [
     id: 2,
     title: "Advanced JavaScript Concepts",
     progress: "60%",
-    hasTakenTest: false,
+    hasTakenTest: true,
+    testScore: 85,
     description: "Master advanced JavaScript techniques",
     materials: [
       { 
@@ -57,16 +60,53 @@ const MyCourses = () => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const [selectedCourse, setSelectedCourse] = React.useState<number | null>(null);
+  const [enrolledCourses, setEnrolledCourses] = React.useState(mockEnrolledCourses);
 
   React.useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login");
     }
+    
+    // Retrieve enrolled courses from localStorage
+    const storedCourses = localStorage.getItem('enrolledCourses');
+    if (storedCourses) {
+      try {
+        const parsedCourses = JSON.parse(storedCourses);
+        // Merge with mock data to ensure we have all the necessary properties
+        const mergedCourses = [...mockEnrolledCourses];
+        
+        // Add any courses from localStorage that aren't in our mock data
+        parsedCourses.forEach((storedCourse: any) => {
+          if (!mergedCourses.some(course => course.id === storedCourse.id)) {
+            mergedCourses.push({
+              ...storedCourse,
+              hasTakenTest: false,
+              testScore: null,
+              progress: "0%",
+              materials: [
+                { 
+                  title: "Course Introduction", 
+                  content: "Welcome to the course! This is an introduction to the main concepts you'll be learning." 
+                },
+                { 
+                  title: "Getting Started", 
+                  content: "In this section, we'll set up your learning environment and prepare for the course material." 
+                }
+              ]
+            });
+          }
+        });
+        
+        setEnrolledCourses(mergedCourses);
+      } catch (error) {
+        console.error("Error parsing enrolled courses:", error);
+      }
+    }
   }, [isLoggedIn, navigate]);
 
   // Get the selected course data
   const courseData = selectedCourse !== null 
-    ? mockEnrolledCourses.find(course => course.id === selectedCourse) 
+    ? enrolledCourses.find(course => course.id === selectedCourse) 
     : null;
 
   // If a course is selected, show its details and materials
@@ -113,13 +153,30 @@ const MyCourses = () => {
                 </p>
               </CardContent>
               <CardFooter className="flex justify-center">
-                <Button 
-                  onClick={() => navigate(`/courses/${courseData.id}/test`)}
-                  className="w-full max-w-xs"
-                >
-                  <FileText className="mr-2 h-4 w-4" />
-                  Take Final Test
-                </Button>
+                {courseData.hasTakenTest ? (
+                  <div className="text-center">
+                    <div className="mb-2 flex items-center justify-center gap-2">
+                      <Award className="h-5 w-5 text-primary" />
+                      <span className="font-medium">Your Test Score: {courseData.testScore}%</span>
+                    </div>
+                    <Button 
+                      onClick={() => navigate(`/courses/${courseData.id}/test`)}
+                      variant="outline"
+                      className="w-full max-w-xs"
+                    >
+                      <FileText className="mr-2 h-4 w-4" />
+                      Retake Test
+                    </Button>
+                  </div>
+                ) : (
+                  <Button 
+                    onClick={() => navigate(`/courses/${courseData.id}/test`)}
+                    className="w-full max-w-xs"
+                  >
+                    <FileText className="mr-2 h-4 w-4" />
+                    Take Final Test
+                  </Button>
+                )}
               </CardFooter>
             </Card>
           </div>
@@ -135,40 +192,64 @@ const MyCourses = () => {
       <Navbar />
       <main className="flex-1 container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">My Enrolled Courses</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockEnrolledCourses.map((course) => (
-            <Card key={course.id} className="flex flex-col">
-              <CardHeader>
-                <CardTitle>{course.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="flex-1">
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    Progress: {course.progress}
-                  </p>
-                </div>
-              </CardContent>
-              <CardFooter className="flex flex-col gap-2">
-                <Button
-                  onClick={() => setSelectedCourse(course.id)}
-                  className="w-full"
-                  variant="outline"
-                >
-                  <BookOpen className="mr-2 h-4 w-4" />
-                  View Course Materials
-                </Button>
-                <Button
-                  onClick={() => navigate(`/courses/${course.id}/test`)}
-                  className="w-full"
-                  variant={course.hasTakenTest ? "secondary" : "default"}
-                >
-                  <FileText className="mr-2 h-4 w-4" />
-                  {course.hasTakenTest ? "Retake Final Test" : "Take Final Test"}
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
+        {enrolledCourses.length === 0 ? (
+          <div className="text-center py-12">
+            <h2 className="text-xl font-medium mb-2">No courses enrolled yet</h2>
+            <p className="text-muted-foreground mb-6">Browse our catalog and enroll in a course to get started</p>
+            <Button onClick={() => navigate("/courses")}>Browse Courses</Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {enrolledCourses.map((course) => (
+              <Card key={course.id} className="flex flex-col">
+                <CardHeader>
+                  <CardTitle>{course.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-1">
+                  <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">
+                      Progress: {course.progress}
+                    </p>
+                    {course.hasTakenTest && course.testScore !== null && (
+                      <div className="flex items-center gap-2">
+                        <Award className="h-4 w-4 text-primary" />
+                        <p className="text-sm font-medium">Test Score: {course.testScore}%</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+                <CardFooter className="flex flex-col gap-2">
+                  <Button
+                    onClick={() => setSelectedCourse(course.id)}
+                    className="w-full"
+                    variant="outline"
+                  >
+                    <BookOpen className="mr-2 h-4 w-4" />
+                    View Course Materials
+                  </Button>
+                  {course.hasTakenTest ? (
+                    <Button
+                      onClick={() => navigate(`/courses/${course.id}/test`)}
+                      className="w-full"
+                      variant="secondary"
+                    >
+                      <FileText className="mr-2 h-4 w-4" />
+                      Score: {course.testScore}% - Retake Test
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => navigate(`/courses/${course.id}/test`)}
+                      className="w-full"
+                    >
+                      <FileText className="mr-2 h-4 w-4" />
+                      Take Final Test
+                    </Button>
+                  )}
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        )}
       </main>
       <Footer />
     </div>

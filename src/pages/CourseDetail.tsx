@@ -166,7 +166,23 @@ const CourseDetail: React.FC = () => {
   const course = coursesData[id as string];
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, userInfo } = useAuth();
+  const [isEnrolled, setIsEnrolled] = React.useState(false);
+  
+  React.useEffect(() => {
+    if (isLoggedIn && id) {
+      const storedCourses = localStorage.getItem('enrolledCourses');
+      if (storedCourses) {
+        try {
+          const parsedCourses = JSON.parse(storedCourses);
+          const enrolled = parsedCourses.some((course: any) => course.id === parseInt(id));
+          setIsEnrolled(enrolled);
+        } catch (error) {
+          console.error("Error parsing enrolled courses:", error);
+        }
+      }
+    }
+  }, [isLoggedIn, id]);
 
   const handleEnroll = () => {
     if (!isLoggedIn) {
@@ -179,12 +195,46 @@ const CourseDetail: React.FC = () => {
       return;
     }
 
-    toast({
-      title: "Enrollment Successful!",
-      description: `You are now enrolled in ${course.title}`,
-    });
-    
-    console.log(`User enrolled in course: ${course.title}`);
+    if (isEnrolled) {
+      navigate("/my-courses");
+      return;
+    }
+
+    try {
+      const storedCourses = localStorage.getItem('enrolledCourses');
+      let enrolledCourses = [];
+      
+      if (storedCourses) {
+        enrolledCourses = JSON.parse(storedCourses);
+      }
+      
+      if (!enrolledCourses.some((c: any) => c.id === parseInt(id as string))) {
+        enrolledCourses.push({
+          id: parseInt(id as string),
+          title: course.title,
+          description: course.description,
+          price: course.price,
+          image: course.image,
+          category: course.category
+        });
+        
+        localStorage.setItem('enrolledCourses', JSON.stringify(enrolledCourses));
+        
+        toast({
+          title: "Enrollment Successful!",
+          description: `You are now enrolled in ${course.title}`,
+        });
+        
+        setIsEnrolled(true);
+      }
+    } catch (error) {
+      console.error("Error enrolling in course:", error);
+      toast({
+        title: "Enrollment Failed",
+        description: "There was an error enrolling in this course",
+        variant: "destructive"
+      });
+    }
   };
 
   if (!course) {
@@ -276,8 +326,9 @@ const CourseDetail: React.FC = () => {
                     <Button 
                       className="w-full"
                       onClick={handleEnroll}
+                      variant={isEnrolled ? "secondary" : "default"}
                     >
-                      Enroll Now
+                      {isEnrolled ? "Go to My Course" : "Enroll Now"}
                     </Button>
                     
                     <div className="space-y-3 text-sm">
