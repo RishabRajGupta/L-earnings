@@ -2,6 +2,7 @@
 import React from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
+import EducationReels from '@/components/EducationReels';
 import HowItWorks from '@/components/HowItWorks';
 import FeaturedCourses from '@/components/FeaturedCourses';
 import Testimonials from '@/components/Testimonials';
@@ -14,6 +15,7 @@ const Index = () => {
       <Navbar />
       <main className="flex-1">
         <HeroSection />
+        <EducationReels />
         <HowItWorks />
         <FeaturedCourses />
         <Testimonials />
