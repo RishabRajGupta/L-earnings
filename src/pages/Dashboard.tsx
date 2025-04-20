@@ -49,65 +49,30 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Enrolled Courses
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center">
-                <Book className="h-5 w-5 text-primary mr-2" />
-                <div className="text-2xl font-bold">{enrolledCoursesCount}</div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Completed Courses
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center">
-                <Award className="h-5 w-5 text-primary mr-2" />
-                <div className="text-2xl font-bold">{completedCoursesCount}</div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Average Test Score
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center">
-                <FileText className="h-5 w-5 text-primary mr-2" />
-                <div className="text-2xl font-bold">{avgTestScore}%</div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                Total Refund
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center">
-                <PiggyBank className="h-5 w-5 text-primary mr-2" />
-                <div className="text-2xl font-bold">₹{totalRefund.toFixed(2)}</div>
-              </div>
-            </CardContent>
-          </Card>
+          {[
+            { icon: Book, title: "Enrolled Courses", value: enrolledCoursesCount },
+            { icon: Award, title: "Completed Courses", value: completedCoursesCount },
+            { icon: FileText, title: "Average Test Score", value: `${avgTestScore}%` },
+            { icon: PiggyBank, title: "Total Refund", value: `₹${totalRefund.toFixed(2)}` }
+          ].map((item, index) => (
+            <Card key={index} className="glass hover-scale hover-glow animate-scale-in">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  {item.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center">
+                  <item.icon className="h-5 w-5 text-primary mr-2" />
+                  <div className="text-2xl font-bold">{item.value}</div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <Card className="lg:col-span-1">
+          <Card className="lg:col-span-1 glass hover-glow">
             <CardHeader>
               <CardTitle>Progress Overview</CardTitle>
             </CardHeader>
@@ -134,52 +99,50 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="lg:col-span-2">
+          <Card className="lg:col-span-2 glass hover-glow">
             <CardHeader>
               <CardTitle>Recent Activity</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-start gap-4 pb-4 border-b">
-                  <div className="rounded-full bg-primary/10 p-2">
-                    <FileText className="h-4 w-4 text-primary" />
+                {[
+                  {
+                    icon: FileText,
+                    title: "Completed Final Test",
+                    subtitle: "Web Development Bootcamp",
+                    detail: "Score: 85%",
+                    time: "2 days ago"
+                  },
+                  {
+                    icon: Book,
+                    title: "Enrolled in Course",
+                    subtitle: "Introduction to React",
+                    time: "1 week ago"
+                  },
+                  {
+                    icon: PiggyBank,
+                    title: "Refund Processed",
+                    subtitle: "Web Development Bootcamp",
+                    detail: "Amount: ₹149.99",
+                    time: "1 week ago"
+                  }
+                ].map((activity, index) => (
+                  <div key={index} className="flex items-start gap-4 pb-4 border-b last:border-0 last:pb-0 transition-all duration-200 hover:bg-white/5 p-4 rounded-lg">
+                    <div className="rounded-full bg-primary/10 p-2">
+                      <activity.icon className="h-4 w-4 text-primary" />
+                    </div>
+                    <div>
+                      <p className="font-medium">{activity.title}</p>
+                      <p className="text-sm text-muted-foreground">{activity.subtitle}</p>
+                      {activity.detail && (
+                        <p className="text-sm text-muted-foreground">{activity.detail}</p>
+                      )}
+                    </div>
+                    <div className="ml-auto text-sm text-muted-foreground">
+                      {activity.time}
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium">Completed Final Test</p>
-                    <p className="text-sm text-muted-foreground">Web Development Bootcamp</p>
-                    <p className="text-sm text-muted-foreground">Score: 85%</p>
-                  </div>
-                  <div className="ml-auto text-sm text-muted-foreground">
-                    2 days ago
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4 pb-4 border-b">
-                  <div className="rounded-full bg-primary/10 p-2">
-                    <Book className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Enrolled in Course</p>
-                    <p className="text-sm text-muted-foreground">Introduction to React</p>
-                  </div>
-                  <div className="ml-auto text-sm text-muted-foreground">
-                    1 week ago
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="rounded-full bg-primary/10 p-2">
-                    <PiggyBank className="h-4 w-4 text-primary" />
-                  </div>
-                  <div>
-                    <p className="font-medium">Refund Processed</p>
-                    <p className="text-sm text-muted-foreground">Web Development Bootcamp</p>
-                    <p className="text-sm text-muted-foreground">Amount: ₹149.99</p>
-                  </div>
-                  <div className="ml-auto text-sm text-muted-foreground">
-                    1 week ago
-                  </div>
-                </div>
+                ))}
               </div>
             </CardContent>
           </Card>
