@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
@@ -8,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, BookOpen, Award } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import ChatBot from '@/components/ChatBot';
 
-// Moved outside to be accessible by all related functions
 const courseMaterials = {
   "1": [
     { 
@@ -101,8 +100,8 @@ const MyCourses = () => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [selectedCourse, setSelectedCourse] = React.useState<number | null>(null);
-  const [enrolledCourses, setEnrolledCourses] = React.useState([]);
+  const [selectedCourse, setSelectedCourse] = useState<number | null>(null);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
 
   React.useEffect(() => {
     if (!isLoggedIn) {
@@ -110,10 +109,8 @@ const MyCourses = () => {
       return;
     }
     
-    // Load enrolled courses from localStorage
     loadEnrolledCourses();
     
-    // Set up a storage event listener to handle updates from other tabs
     window.addEventListener('storage', handleStorageChange);
     
     return () => {
@@ -129,16 +126,13 @@ const MyCourses = () => {
   
   const loadEnrolledCourses = () => {
     try {
-      // Get stored courses
       const storedCourses = localStorage.getItem('enrolledCourses');
       let courses = [];
       
       if (storedCourses) {
         const parsedCourses = JSON.parse(storedCourses);
         
-        // Map the stored courses to include the additional fields and proper materials
         courses = parsedCourses.map((course) => {
-          // Get course materials based on course ID
           const materials = courseMaterials[course.id] || [
             { 
               title: "Course Introduction", 
@@ -159,7 +153,6 @@ const MyCourses = () => {
           };
         });
       } else {
-        // Default to empty array if nothing is stored
         courses = [];
       }
       
@@ -241,6 +234,7 @@ const MyCourses = () => {
             </Card>
           </div>
         </main>
+        <ChatBot />
         <Footer />
       </div>
     );
@@ -308,6 +302,7 @@ const MyCourses = () => {
           </div>
         )}
       </main>
+      <ChatBot />
       <Footer />
     </div>
   );
