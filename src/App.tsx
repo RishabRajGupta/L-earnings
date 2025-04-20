@@ -16,6 +16,7 @@ import MyCourses from "./pages/MyCourses";
 import FinalTest from "./pages/FinalTest";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
+import ChatBot from "./components/ChatBot";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
@@ -43,6 +44,7 @@ const App = () => (
               <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <ChatBot />
           </TooltipProvider>
         </AuthProvider>
       </ThemeProvider>

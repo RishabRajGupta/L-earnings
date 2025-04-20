@@ -6,6 +6,7 @@ import HowItWorks from '@/components/HowItWorks';
 import FeaturedCourses from '@/components/FeaturedCourses';
 import Testimonials from '@/components/Testimonials';
 import Footer from '@/components/Footer';
+import ChatBot from '@/components/ChatBot';
 
 const Index = () => {
   return (
@@ -17,6 +18,7 @@ const Index = () => {
         <FeaturedCourses />
         <Testimonials />
       </main>
+      <ChatBot />
       <Footer />
     </div>
   );
