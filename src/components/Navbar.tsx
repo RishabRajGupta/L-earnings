@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, User, LogOut, BookOpen, LayoutDashboard } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import ThemeToggle from "@/components/ThemeToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,7 +24,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b dark:border-white/10 border-black/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Link 
@@ -54,6 +55,7 @@ const Navbar: React.FC = () => {
               </Link>
             </>
           )}
+          <ThemeToggle />
         </nav>
         <div className="flex items-center gap-2">
           {isLoggedIn ? (

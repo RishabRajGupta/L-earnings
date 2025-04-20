@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -6,6 +7,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, BookOpen, Award } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const mockEnrolledCourses = [
   {
@@ -36,8 +38,8 @@ const mockEnrolledCourses = [
     title: "Advanced JavaScript Concepts",
     price: 7499,
     progress: "60%",
-    hasTakenTest: true,
-    testScore: 85,
+    hasTakenTest: false,
+    testScore: null,
     description: "Master advanced JavaScript techniques",
     materials: [
       { 
@@ -59,28 +61,62 @@ const mockEnrolledCourses = [
 const MyCourses = () => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [selectedCourse, setSelectedCourse] = React.useState<number | null>(null);
-  const [enrolledCourses, setEnrolledCourses] = React.useState(mockEnrolledCourses);
+  const [enrolledCourses, setEnrolledCourses] = React.useState([]);
 
   React.useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login");
+      return;
     }
     
-    const storedCourses = localStorage.getItem('enrolledCourses');
-    if (storedCourses) {
-      try {
+    // Load enrolled courses from localStorage
+    loadEnrolledCourses();
+    
+    // Set up a storage event listener to handle updates from other tabs
+    window.addEventListener('storage', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [isLoggedIn, navigate]);
+
+  const handleStorageChange = (e) => {
+    if (e.key === 'enrolledCourses') {
+      loadEnrolledCourses();
+    }
+  };
+  
+  const loadEnrolledCourses = () => {
+    try {
+      // Get stored courses
+      const storedCourses = localStorage.getItem('enrolledCourses');
+      let courses = [];
+      
+      if (storedCourses) {
         const parsedCourses = JSON.parse(storedCourses);
-        const mergedCourses = [...mockEnrolledCourses];
         
-        parsedCourses.forEach((storedCourse: any) => {
-          if (!mergedCourses.some(course => course.id === storedCourse.id)) {
-            mergedCourses.push({
-              ...storedCourse,
-              hasTakenTest: false,
-              testScore: null,
-              progress: "0%",
-              materials: [
+        // Map the stored courses to include the additional fields
+        courses = parsedCourses.map((course) => {
+          // Check if this course exists in our mock data
+          const mockCourse = mockEnrolledCourses.find(mc => mc.id === course.id);
+          
+          if (mockCourse) {
+            // If it exists in mock data, use that but preserve test results
+            return {
+              ...mockCourse,
+              hasTakenTest: course.hasTakenTest || false,
+              testScore: course.testScore || null
+            };
+          } else {
+            // If it's a new course, ensure it has all necessary fields
+            return {
+              ...course,
+              hasTakenTest: course.hasTakenTest || false,
+              testScore: course.testScore || null,
+              progress: course.progress || "0%",
+              materials: course.materials || [
                 { 
                   title: "Course Introduction", 
                   content: "Welcome to the course! This is an introduction to the main concepts you'll be learning." 
@@ -90,16 +126,24 @@ const MyCourses = () => {
                   content: "In this section, we'll set up your learning environment and prepare for the course material." 
                 }
               ]
-            });
+            };
           }
         });
-        
-        setEnrolledCourses(mergedCourses);
-      } catch (error) {
-        console.error("Error parsing enrolled courses:", error);
+      } else {
+        // Default to empty array if nothing is stored
+        courses = [];
       }
+      
+      setEnrolledCourses(courses);
+    } catch (error) {
+      console.error("Error loading enrolled courses:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load your enrolled courses",
+        variant: "destructive"
+      });
     }
-  }, [isLoggedIn, navigate]);
+  };
 
   const courseData = selectedCourse !== null 
     ? enrolledCourses.find(course => course.id === selectedCourse) 
@@ -154,14 +198,6 @@ const MyCourses = () => {
                       <Award className="h-5 w-5 text-primary" />
                       <span className="font-medium">Your Test Score: {courseData.testScore}%</span>
                     </div>
-                    <Button 
-                      onClick={() => navigate(`/courses/${courseData.id}/test`)}
-                      variant="outline"
-                      className="w-full max-w-xs"
-                    >
-                      <FileText className="mr-2 h-4 w-4" />
-                      Retake Test
-                    </Button>
                   </div>
                 ) : (
                   <Button 
@@ -195,7 +231,7 @@ const MyCourses = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {enrolledCourses.map((course) => (
-              <Card key={course.id} className="flex flex-col">
+              <Card key={course.id} className="flex flex-col glass hover-scale hover-glow">
                 <CardHeader>
                   <CardTitle>{course.title}</CardTitle>
                 </CardHeader>

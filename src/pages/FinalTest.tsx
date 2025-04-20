@@ -415,16 +415,16 @@ const FinalTest = () => {
     
     // Save test results to localStorage
     try {
-      // First, get the enrolled courses
-      const storedCourses = localStorage.getItem('enrolledCourses');
-      let enrolledCourses = [];
+      // Get the enrolled courses
+      const storedCoursesString = localStorage.getItem('enrolledCourses');
+      let storedCourses = [];
       
-      if (storedCourses) {
-        enrolledCourses = JSON.parse(storedCourses);
+      if (storedCoursesString) {
+        storedCourses = JSON.parse(storedCoursesString);
       }
       
       // Update the course with test results
-      const updatedCourses = enrolledCourses.map((course: any) => {
+      const updatedCourses = storedCourses.map((course: any) => {
         if (course.id === parseInt(courseId)) {
           return {
             ...course,
@@ -435,37 +435,33 @@ const FinalTest = () => {
         return course;
       });
       
+      // Save the updated courses back to localStorage
       localStorage.setItem('enrolledCourses', JSON.stringify(updatedCourses));
       
-      // Also update mock enrolled courses for the current session
-      const mockEnrolledUpdated = localStorage.getItem('mockEnrolledCourses');
-      if (mockEnrolledUpdated) {
-        const parsedMockCourses = JSON.parse(mockEnrolledUpdated);
-        const updatedMockCourses = parsedMockCourses.map((course: any) => {
-          if (course.id === parseInt(courseId)) {
-            return {
-              ...course,
-              hasTakenTest: true,
-              testScore: scorePercentage
-            };
-          }
-          return course;
-        });
-        
-        localStorage.setItem('mockEnrolledCourses', JSON.stringify(updatedMockCourses));
-      }
+      // Dispatch a storage event to notify other tabs
+      window.dispatchEvent(new Event('storage'));
+      
+      toast({
+        title: "Test completed!",
+        description: `You scored ${scorePercentage}% and earned a refund of ₹${calculatedRefund.toFixed(2)}`,
+      });
     } catch (error) {
       console.error("Error saving test results:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save your test results",
+        variant: "destructive"
+      });
     }
   };
 
   // Test summary screen
   if (testCompleted) {
     return (
-      <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <div className="min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-1 container mx-auto px-4 py-8">
-          <Card className="max-w-3xl mx-auto">
+          <Card className="max-w-3xl mx-auto glass hover-glow">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl">Test Completed!</CardTitle>
             </CardHeader>
@@ -520,7 +516,7 @@ const FinalTest = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 container mx-auto px-4 py-8">
-        <Card className="max-w-3xl mx-auto">
+        <Card className="max-w-3xl mx-auto glass hover-glow">
           <CardHeader>
             <CardTitle>{courseTitle}: Final Test</CardTitle>
           </CardHeader>
