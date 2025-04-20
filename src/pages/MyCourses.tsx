@@ -9,54 +9,93 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { FileText, BookOpen, Award } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-const mockEnrolledCourses = [
-  {
-    id: 1,
-    title: "Introduction to React",
-    price: 4999,
-    progress: "80%",
-    hasTakenTest: false,
-    testScore: null,
-    description: "Learn the foundations of React",
-    materials: [
-      { 
-        title: "React Basics", 
-        content: "React is a JavaScript library for building user interfaces. It allows developers to create large web applications that can change data, without reloading the page." 
-      },
-      { 
-        title: "Components and Props", 
-        content: "Components let you split the UI into independent, reusable pieces. They accept arbitrary inputs (called 'props') and return React elements describing what should appear on the screen." 
-      },
-      { 
-        title: "State and Lifecycle", 
-        content: "State allows React components to change their output over time in response to user actions, network responses, and anything else." 
-      }
-    ]
-  },
-  {
-    id: 2,
-    title: "Advanced JavaScript Concepts",
-    price: 7499,
-    progress: "60%",
-    hasTakenTest: false,
-    testScore: null,
-    description: "Master advanced JavaScript techniques",
-    materials: [
-      { 
-        title: "Closures and Scope", 
-        content: "A closure is the combination of a function bundled together with references to its surrounding state (the lexical environment)." 
-      },
-      { 
-        title: "Promises and Async/Await", 
-        content: "Promises provide a cleaner way to handle asynchronous operations compared to callbacks. Async/await is syntactic sugar built on top of promises." 
-      },
-      { 
-        title: "Prototypal Inheritance", 
-        content: "JavaScript objects have a link to a prototype object. When trying to access a property that does not exist in an object, JavaScript tries to find it in the prototype chain." 
-      }
-    ]
-  }
-];
+// Moved outside to be accessible by all related functions
+const courseMaterials = {
+  "1": [
+    { 
+      title: "Python Basics", 
+      content: "Python is a high-level, interpreted programming language known for its readability and versatility. This section covers variables, data types, and basic syntax." 
+    },
+    { 
+      title: "Control Flow", 
+      content: "Learn about if statements, loops, and conditional expressions to control the flow of your Python programs." 
+    },
+    { 
+      title: "Functions and Modules", 
+      content: "Discover how to write reusable code blocks with functions and organize your code into modules." 
+    }
+  ],
+  "2": [
+    { 
+      title: "HTML Fundamentals", 
+      content: "HTML provides the structure for web pages. Learn about tags, attributes, and how to create well-formed HTML documents." 
+    },
+    { 
+      title: "CSS Styling", 
+      content: "CSS allows you to style your HTML elements. Explore selectors, properties, and how to create responsive designs." 
+    },
+    { 
+      title: "JavaScript Basics", 
+      content: "JavaScript adds interactivity to websites. Learn about variables, functions, DOM manipulation, and event handling." 
+    }
+  ],
+  "3": [
+    { 
+      title: "R Introduction", 
+      content: "R is a programming language designed for statistical computing and graphics. Learn the basics of R syntax and data structures." 
+    },
+    { 
+      title: "Data Manipulation", 
+      content: "Discover how to clean, transform, and analyze data using R packages like dplyr and tidyr." 
+    },
+    { 
+      title: "Data Visualization", 
+      content: "Create compelling visualizations with ggplot2 and other R plotting libraries to communicate insights effectively." 
+    }
+  ],
+  "4": [
+    { 
+      title: "Design Principles", 
+      content: "Understand fundamental design principles like contrast, repetition, alignment, and proximity that form the foundation of good UI/UX." 
+    },
+    { 
+      title: "User Research", 
+      content: "Learn techniques for gathering user feedback, creating personas, and understanding user needs and behaviors." 
+    },
+    { 
+      title: "Prototyping", 
+      content: "Explore tools and methods for creating wireframes and interactive prototypes to test your designs before implementation." 
+    }
+  ],
+  "5": [
+    { 
+      title: "Marketing Fundamentals", 
+      content: "Learn core marketing concepts including target audience, positioning, and creating a marketing strategy." 
+    },
+    { 
+      title: "Social Media Marketing", 
+      content: "Discover how to leverage social media platforms for brand building, customer engagement, and driving conversions." 
+    },
+    { 
+      title: "Analytics and Optimization", 
+      content: "Learn how to measure campaign performance, analyze data, and optimize your marketing efforts for better results." 
+    }
+  ],
+  "6": [
+    { 
+      title: "Introduction to ML", 
+      content: "Understand the core concepts of machine learning, including supervised vs. unsupervised learning and model evaluation." 
+    },
+    { 
+      title: "Classification Algorithms", 
+      content: "Explore popular classification algorithms like decision trees, random forests, and support vector machines." 
+    },
+    { 
+      title: "Neural Networks", 
+      content: "Learn about artificial neural networks, backpropagation, and how deep learning is revolutionizing AI applications." 
+    }
+  ]
+};
 
 const MyCourses = () => {
   const { isLoggedIn } = useAuth();
@@ -97,37 +136,27 @@ const MyCourses = () => {
       if (storedCourses) {
         const parsedCourses = JSON.parse(storedCourses);
         
-        // Map the stored courses to include the additional fields
+        // Map the stored courses to include the additional fields and proper materials
         courses = parsedCourses.map((course) => {
-          // Check if this course exists in our mock data
-          const mockCourse = mockEnrolledCourses.find(mc => mc.id === course.id);
+          // Get course materials based on course ID
+          const materials = courseMaterials[course.id] || [
+            { 
+              title: "Course Introduction", 
+              content: "Welcome to the course! This is an introduction to the main concepts you'll be learning." 
+            },
+            { 
+              title: "Getting Started", 
+              content: "In this section, we'll set up your learning environment and prepare for the course material." 
+            }
+          ];
           
-          if (mockCourse) {
-            // If it exists in mock data, use that but preserve test results
-            return {
-              ...mockCourse,
-              hasTakenTest: course.hasTakenTest || false,
-              testScore: course.testScore || null
-            };
-          } else {
-            // If it's a new course, ensure it has all necessary fields
-            return {
-              ...course,
-              hasTakenTest: course.hasTakenTest || false,
-              testScore: course.testScore || null,
-              progress: course.progress || "0%",
-              materials: course.materials || [
-                { 
-                  title: "Course Introduction", 
-                  content: "Welcome to the course! This is an introduction to the main concepts you'll be learning." 
-                },
-                { 
-                  title: "Getting Started", 
-                  content: "In this section, we'll set up your learning environment and prepare for the course material." 
-                }
-              ]
-            };
-          }
+          return {
+            ...course,
+            materials,
+            hasTakenTest: course.hasTakenTest || false,
+            testScore: course.testScore || null,
+            progress: course.progress || "0%"
+          };
         });
       } else {
         // Default to empty array if nothing is stored

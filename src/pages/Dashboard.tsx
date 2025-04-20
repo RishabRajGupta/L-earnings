@@ -71,7 +71,7 @@ const Dashboard = () => {
             // Get course price
             const coursePrice = course.price || 0;
             
-            // Calculate refund based on score percentage
+            // Calculate refund based on score percentage (score% of course price)
             const refundAmount = (course.testScore / 100) * coursePrice;
             totalRefundAmount += refundAmount;
             
