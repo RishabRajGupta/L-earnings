@@ -1,33 +1,45 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { confirmSignUp, resendSignUpCode } from "@aws-amplify/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { GraduationCap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { confirmSignUp, resendSignUpCode } from "@aws-amplify/auth";
 
 const Verify = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  // Email passed from signup
   const location = useLocation();
-  const email = location.state?.email || "";
+
+  // The email passed from signup page
+  const email = location.state?.email;
 
   const [code, setCode] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  if (!email) {
+    return (
+      <div className="text-center pt-20">
+        <p>Error: No email provided</p>
+        <a href="/signup" className="text-blue-600 underline">
+          Go back to signup
+        </a>
+      </div>
+    );
+  }
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    setLoading(true);
 
     try {
-      await confirmSignUp(email, code);
+      await confirmSignUp({
+        username: email,   // REQUIRED
+        confirmationCode: code,
+      });
 
       toast({
-        title: "Verification successful",
-        description: "Your account has been verified! You can now sign in.",
+        title: "Email verified!",
+        description: "Your account has been successfully verified.",
       });
 
       navigate("/login");
@@ -36,88 +48,66 @@ const Verify = () => {
 
       toast({
         title: "Verification failed",
-        description: error.message || "Invalid code. Please try again.",
+        description: error.message || "Invalid code. Try again.",
         variant: "destructive",
       });
-    } finally {
-      setIsSubmitting(false);
     }
+
+    setLoading(false);
   };
 
   const handleResend = async () => {
     try {
-      await resendSignUpCode(email);
+      await resendSignUpCode({ username: email });
 
       toast({
-        title: "Code resent",
-        description: "A new verification code has been sent to your email.",
+        title: "Code sent",
+        description: "A new verification code was sent to your email.",
       });
     } catch (error: any) {
-      console.error("Resend code error:", error);
-
+      console.error("Resend error:", error);
       toast({
-        title: "Resend failed",
-        description: error.message || "Could not resend the code.",
+        title: "Error",
+        description: error.message,
         variant: "destructive",
       });
     }
   };
 
   return (
-    <div className="flex min-h-screen bg-muted/30">
-      {/* MAIN SECTION */}
-      <div className="flex flex-col items-center justify-center w-full px-4 sm:px-6 lg:px-8">
-        <div className="w-full max-w-sm space-y-6">
-          <div className="space-y-2 text-center">
-            <div className="flex items-center justify-center gap-2 text-2xl font-bold text-primary">
-              <GraduationCap className="h-8 w-8" />
-              <span>L-earnings</span>
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight">Verify your email</h1>
-            <p className="text-sm text-muted-foreground">
-              Enter the verification code sent to <strong>{email}</strong>
-            </p>
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-muted/30">
+      <div className="w-full max-w-sm bg-white p-6 rounded-xl shadow">
+        <h2 className="text-2xl font-bold mb-2 text-center">Verify your email</h2>
+        <p className="text-center text-sm text-muted-foreground mb-6">
+          Enter the verification code sent to <strong>{email}</strong>
+        </p>
 
-          <form onSubmit={handleVerify} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="code">Verification Code</Label>
-              <Input
-                id="code"
-                type="text"
-                placeholder="123456"
-                required
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-              />
-            </div>
+        <form onSubmit={handleVerify} className="space-y-4">
+          <Input
+            placeholder="Enter verification code"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            required
+          />
 
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Verifying..." : "Verify Email"}
-            </Button>
-          </form>
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Verifying..." : "Verify Email"}
+          </Button>
+        </form>
 
-          {/* Resend link */}
-          <div className="text-center text-sm">
-            Didn’t receive a code?{" "}
-            <button
-              onClick={handleResend}
-              className="font-medium text-primary hover:underline"
-            >
-              Resend code
-            </button>
-          </div>
+        <button
+          className="mt-4 text-sm text-primary underline w-full text-center"
+          onClick={handleResend}
+        >
+          Resend code
+        </button>
 
-          {/* Back to login */}
-          <div className="text-center text-sm">
-            <button
-              onClick={() => navigate("/login")}
-              className="font-medium text-primary hover:underline"
-            >
-              Back to Login
-            </button>
-          </div>
-        </div>
+        <button
+          onClick={() => navigate("/login")}
+          className="mt-3 text-sm text-primary underline w-full text-center"
+        >
+          Back to Login
+        </button>
       </div>
     </div>
   );
