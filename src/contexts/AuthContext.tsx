@@ -1,43 +1,63 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getCurrentUser, signOut, signIn } from "@aws-amplify/auth";
+import { getCurrentUser, signIn, signOut } from "@aws-amplify/auth";
 
 interface AuthContextType {
-  user: any | null;
+  isLoggedIn: boolean;
+  userInfo: { email: string; name: string } | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  login: async () => {},
-  logout: async () => {},
-});
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<any | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInfo, setUserInfo] = useState<{ email: string; name: string } | null>(null);
 
-  // Load user on refresh
   useEffect(() => {
-    getCurrentUser()
-      .then((u) => setUser(u))
-      .catch(() => setUser(null));
+    const load = async () => {
+      try {
+        const user = await getCurrentUser();
+
+        setIsLoggedIn(true);
+        setUserInfo({
+          email: user?.signInDetails?.loginId || "",
+          name: user?.username || "",
+        });
+      } catch {
+        setIsLoggedIn(false);
+        setUserInfo(null);
+      }
+    };
+
+    load();
   }, []);
 
   const login = async (email: string, password: string) => {
-    const signedInUser = await signIn({ username: email, password });
-    setUser(signedInUser);
+    const signedIn = await signIn({ username: email, password });
+
+    setIsLoggedIn(true);
+    setUserInfo({
+      email,
+      name: signedIn?.username || email,
+    });
   };
 
   const logout = async () => {
-    await signOut();
-    setUser(null);
+      await signOut();
+      setIsLoggedIn(false);
+      setUserInfo(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, userInfo, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
+};
