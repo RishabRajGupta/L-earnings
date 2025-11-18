@@ -1,74 +1,43 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import { getCurrentUser, signOut, signIn } from "@aws-amplify/auth";
 
 interface AuthContextType {
-  isLoggedIn: boolean;
-  userInfo: UserInfo | null;
+  user: any | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
-interface UserInfo {
-  email: string;
-  name: string;
-}
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  login: async () => {},
+  logout: async () => {},
+});
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<any | null>(null);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-
-  // Load Cognito session on app start
+  // Load user on refresh
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const cognitoUser = await Auth.currentAuthenticatedUser();
-        const email = cognitoUser.attributes.email;
-
-        setUserInfo({
-          email,
-          name: email.split("@")[0],
-        });
-        setIsLoggedIn(true);
-      } catch (err) {
-        // No valid session
-        setIsLoggedIn(false);
-        setUserInfo(null);
-      }
-    };
-
-    checkUser();
+    getCurrentUser()
+      .then((u) => setUser(u))
+      .catch(() => setUser(null));
   }, []);
 
-  // REAL LOGIN with Cognito
   const login = async (email: string, password: string) => {
-    const user = await Auth.signIn(email, password);
-
-    setIsLoggedIn(true);
-    setUserInfo({
-      email: user.attributes.email,
-      name: user.attributes.email.split("@")[0],
-    });
+    const signedInUser = await signIn({ username: email, password });
+    setUser(signedInUser);
   };
 
-  // REAL LOGOUT
   const logout = async () => {
-    await Auth.signOut();
-    setIsLoggedIn(false);
-    setUserInfo(null);
+    await signOut();
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userInfo, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};
+export const useAuth = () => useContext(AuthContext);
