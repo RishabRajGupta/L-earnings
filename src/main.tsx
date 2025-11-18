@@ -3,10 +3,10 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 
-import Amplify from "aws-amplify";
+import { Amplify } from "aws-amplify";   // <-- FIXED
 import awsconfig from "./aws-exports";
 
-// Initialize AWS Cognito
+// Initialize Amplify
 Amplify.configure(awsconfig);
 
 createRoot(document.getElementById("root")!).render(
