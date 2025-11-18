@@ -1,5 +1,10 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { getCurrentUser, signIn, signOut } from "@aws-amplify/auth";
+import { 
+  getCurrentUser, 
+  signIn, 
+  signOut, 
+  fetchUserAttributes 
+} from "@aws-amplify/auth";
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -14,15 +19,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState<{ email: string; name: string } | null>(null);
 
+  // Load session on app start
   useEffect(() => {
-    const load = async () => {
+    const loadUser = async () => {
       try {
         const user = await getCurrentUser();
+        const attrs = await fetchUserAttributes();
 
         setIsLoggedIn(true);
         setUserInfo({
-          email: user?.signInDetails?.loginId || "",
-          name: user?.username || "",
+          email: attrs.email || "",
+          name: attrs.name || attrs.email || "",
         });
       } catch {
         setIsLoggedIn(false);
@@ -30,23 +37,26 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
-    load();
+    loadUser();
   }, []);
 
+  // Login function
   const login = async (email: string, password: string) => {
-    const signedIn = await signIn({ username: email, password });
+    const signedInUser = await signIn({ username: email, password });
+    const attrs = await fetchUserAttributes();
 
     setIsLoggedIn(true);
     setUserInfo({
-      email,
-      name: signedIn?.username || email,
+      email: attrs.email || email,
+      name: attrs.name || email,
     });
   };
 
+  // Logout
   const logout = async () => {
-      await signOut();
-      setIsLoggedIn(false);
-      setUserInfo(null);
+    await signOut();
+    setIsLoggedIn(false);
+    setUserInfo(null);
   };
 
   return (
