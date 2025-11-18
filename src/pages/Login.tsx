@@ -1,4 +1,3 @@
-import { signIn } from "@aws-amplify/auth";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,8 @@ import { GraduationCap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
 
+import { signIn } from "@aws-amplify/auth";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,37 +18,37 @@ const Login = () => {
 
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { login } = useAuth(); // Cognito-backed login
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // REAL Cognito authentication
-      const response = await signIn({ username: email, password });
+      // 🔐 REAL Cognito login
+      const response = await signIn({
+        username: email,
+        password,
+      });
 
       toast({
         title: "Login successful",
         description: `Welcome back, ${email}!`,
       });
 
-      // Save authenticated user to React context
-      await login(email, password);
+      // Store session in your own context
+      login(email, { email, name: "" });
 
-      // Redirect to homepage
-      setTimeout(() => {
-        navigate("/");
-      }, 800);
-
+      // Redirect user
+      navigate("/");
     } catch (error: any) {
       console.error("Login error:", error);
 
-      let message = "Please check your credentials and try again.";
+      let message = "Please check your credentials.";
 
-      if (error.code === "UserNotConfirmedException") {
-        message = "Your email is not verified. Please check your inbox.";
-      } else if (error.code === "NotAuthorizedException") {
+      if (error.name === "UserNotConfirmedException") {
+        message = "Your email is not verified.";
+      } else if (error.name === "NotAuthorizedException") {
         message = "Incorrect email or password.";
       } else if (error.message) {
         message = error.message;
