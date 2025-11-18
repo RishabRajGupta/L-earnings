@@ -19,6 +19,7 @@ import Profile from "./pages/Profile";
 import ChatBot from "./components/ChatBot";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import Verify from "./pages/Verify";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="/my-courses" element={<MyCourses />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/verify" element={<Verify />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <ChatBot />
