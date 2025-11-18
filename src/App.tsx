@@ -19,7 +19,7 @@ import Profile from "./pages/Profile";
 import ChatBot from "./components/ChatBot";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Verify from "./pages/Verify";
-import Navbar from "./components/Navbar"; 
+import Navbar from "./components/Navbar";
 
 const queryClient = new QueryClient();
 
@@ -28,9 +28,7 @@ const App = () => (
     <BrowserRouter>
       <ThemeProvider>
         <TooltipProvider>
-
-          <Navbar />  {/* Only one navbar globally */}
-
+          <Navbar />
           <Toaster />
           <Sonner />
 
@@ -51,7 +49,6 @@ const App = () => (
           </Routes>
 
           <ChatBot />
-
         </TooltipProvider>
       </ThemeProvider>
     </BrowserRouter>
