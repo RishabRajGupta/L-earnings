@@ -20,7 +20,6 @@ import ChatBot from "./components/ChatBot";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Verify from "./pages/Verify";
 import Navbar from "./components/Navbar"; 
-// IMPORTANT: Navbar was missing in your App.tsx, make sure it's imported
 
 const queryClient = new QueryClient();
 
@@ -29,9 +28,12 @@ const App = () => (
     <BrowserRouter>
       <ThemeProvider>
         <TooltipProvider>
-          <Navbar />   {/* Add this if not already globally shown */}
+
+          <Navbar />  {/* Only one navbar globally */}
+
           <Toaster />
           <Sonner />
+
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/courses" element={<Courses />} />
@@ -47,7 +49,9 @@ const App = () => (
             <Route path="/verify" element={<Verify />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+
           <ChatBot />
+
         </TooltipProvider>
       </ThemeProvider>
     </BrowserRouter>
