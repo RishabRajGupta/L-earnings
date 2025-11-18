@@ -7,7 +7,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { GraduationCap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
-import { Auth } from "aws-amplify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
