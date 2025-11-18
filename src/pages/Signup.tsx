@@ -25,12 +25,10 @@ const Signup = () => {
       setPasswordError("Passwords do not match");
       return false;
     }
-
     if (password.length < 8) {
       setPasswordError("Password must be at least 8 characters");
       return false;
     }
-
     setPasswordError("");
     return true;
   };
@@ -38,13 +36,13 @@ const Signup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) return;
-    if (!agreedTerms) return;
+    if (!validateForm() || !agreedTerms) return;
 
     setIsSubmitting(true);
 
     try {
-      const result = await signUp({
+      // Cognito signup (Amplify v6)
+      await signUp({
         username: email,
         password,
         attributes: {
@@ -53,21 +51,20 @@ const Signup = () => {
         },
       });
 
-
       toast({
         title: "Account created!",
         description: "A verification code has been sent to your email.",
       });
 
-      // Redirect to verification page
+      // Redirect to verification screen
       navigate("/verify", {
-        state: { email: email }, // pass email to verify page
+        state: { email },
       });
 
     } catch (error: any) {
       console.error("Signup error:", error);
 
-      let message = "Could not create account.";
+      let message = "Signup failed.";
 
       if (error.code === "UsernameExistsException") {
         message = "An account with this email already exists.";
@@ -88,29 +85,28 @@ const Signup = () => {
   return (
     <div className="flex min-h-screen bg-muted/30">
 
-      {/* LEFT SIDE - IMAGE */}
+      {/* LEFT SIDE */}
       <div className="hidden lg:block lg:w-1/2 bg-muted relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-accent/30"></div>
         <div className="absolute inset-0 flex items-center justify-center p-12">
-          <div className="max-w-lg text-center">
-            <div className="space-y-2">
-              <div className="inline-block rounded-lg bg-primary px-3 py-1 text-sm text-primary-foreground">
-                Performance-Based Learning
-              </div>
-              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
-                Education that rewards excellence
-              </h2>
-              <p className="text-muted-foreground md:text-lg/relaxed">
-                Join thousands of learners benefiting from performance-based pricing.
-              </p>
+          <div className="max-w-lg text-center space-y-2">
+            <div className="inline-block rounded-lg bg-primary px-3 py-1 text-sm text-primary-foreground">
+              Performance-Based Learning
             </div>
+            <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">
+              Education that rewards excellence
+            </h2>
+            <p className="text-muted-foreground md:text-lg/relaxed">
+              Join thousands of learners benefiting from performance-based pricing.
+            </p>
           </div>
         </div>
       </div>
 
-      {/* RIGHT SIDE - FORM */}
+      {/* RIGHT SIDE */}
       <div className="flex flex-col items-center justify-center w-full px-4 lg:w-1/2 sm:px-6 lg:px-8">
         <div className="w-full max-w-sm space-y-6">
+          
           <div className="space-y-2 text-center">
             <Link to="/" className="inline-block">
               <div className="flex items-center gap-2 text-2xl font-bold text-primary">
@@ -125,6 +121,7 @@ const Signup = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            
             {/* Full Name */}
             <div className="space-y-2">
               <Label htmlFor="full-name">Full Name</Label>
@@ -216,7 +213,6 @@ const Signup = () => {
               </label>
             </div>
 
-            {/* Submit */}
             <Button
               type="submit"
               className="w-full"
@@ -232,6 +228,7 @@ const Signup = () => {
               Sign in
             </Link>
           </div>
+        
         </div>
       </div>
     </div>
