@@ -25,27 +25,27 @@ const Login = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await signIn({ username: email, password });
-    } catch (err: any) {
-      if (err.name === "UserAlreadyAuthenticatedException") {
-        // user is already logged in → continue without failing
-        console.warn("User already authenticated, continuing...");
-      } else {
-        throw err; // real errors should still throw
+      // Try Cognito sign in
+      try {
+        await signIn({ username: email, password });
+      } catch (err: any) {
+        if (err.name === "UserAlreadyAuthenticatedException") {
+          console.warn("User already authenticated — skipping signIn");
+        } else {
+          throw err;
+        }
       }
-    }
 
+      // Update global auth state
+      await login(email, password);
 
       toast({
         title: "Login successful",
         description: `Welcome back, ${email}!`,
       });
 
-      // Store session in your own context
-      login(email, { email, name: "" });
-
-      // Redirect user
       navigate("/");
+
     } catch (error: any) {
       console.error("Login error:", error);
 
@@ -159,7 +159,8 @@ const Login = () => {
                 Get rewarded for your dedication
               </h2>
               <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed">
-                With L-earnings, your academic success directly impacts your cost. Score 90% and get 90% of your fee refunded!
+                With L-earnings, your academic success directly impacts your cost. 
+                Score 90% and get 90% of your fee refunded!
               </p>
             </div>
           </div>
