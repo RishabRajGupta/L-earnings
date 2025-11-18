@@ -1,3 +1,4 @@
+import { signUp } from "@aws-amplify/auth";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -43,15 +44,15 @@ const Signup = () => {
     setIsSubmitting(true);
 
     try {
-      // REAL Cognito signup
-      await Auth.signUp({
+      const result = await signUp({
         username: email,
-        password: password,
+        password,
         attributes: {
-          email: email,
+          email,
           name: fullName,
         },
       });
+
 
       toast({
         title: "Account created!",
