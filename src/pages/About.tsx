@@ -1,12 +1,11 @@
-
 import React from "react";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const About = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      {/* Navbar is global, do NOT include here */}
+
       <main className="flex-1 container px-4 md:px-6 py-12">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold mb-6">About L-earnings</h1>
@@ -55,6 +54,7 @@ const About = () => {
           </div>
         </div>
       </main>
+
       <Footer />
     </div>
   );
