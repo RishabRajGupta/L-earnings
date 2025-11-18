@@ -1,5 +1,4 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { Auth } from "aws-amplify";
 
 interface AuthContextType {
   isLoggedIn: boolean;
