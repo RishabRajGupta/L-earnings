@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { GraduationCap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Auth } from "aws-amplify";
 
 const Signup = () => {
   const [fullName, setFullName] = useState("");
