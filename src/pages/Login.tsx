@@ -1,3 +1,4 @@
+import { signIn } from "@aws-amplify/auth";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,7 @@ const Login = () => {
 
     try {
       // REAL Cognito authentication
-      const user = await Auth.signIn(email, password);
+      const user = await signIn({ username: email, password });
 
       toast({
         title: "Login successful",
