@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,41 +7,55 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { GraduationCap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { Auth } from "aws-amplify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login } = useAuth(); // Cognito-backed login
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
-      // This would be connected to authentication backend in the future
-      console.log("Login attempt with:", { email, password, rememberMe });
-      
-      // Simulate login success for now
+      // REAL Cognito authentication
+      const user = await Auth.signIn(email, password);
+
       toast({
         title: "Login successful",
-        description: "Welcome back to L-earnings!",
+        description: `Welcome back, ${user.attributes.email}!`,
       });
-      
-      // Use our auth context to save the user data
-      login(email, { email, name: email.split('@')[0] });
-      
-      // In a real app, you'd verify credentials first
+
+      // Save authenticated user to React context
+      await login(email, password);
+
+      // Redirect to homepage
       setTimeout(() => {
-        navigate("/");  // Redirect to home page
-      }, 1000);
-    } catch (error) {
+        navigate("/");
+      }, 800);
+
+    } catch (error: any) {
+      console.error("Login error:", error);
+
+      let message = "Please check your credentials and try again.";
+
+      if (error.code === "UserNotConfirmedException") {
+        message = "Your email is not verified. Please check your inbox.";
+      } else if (error.code === "NotAuthorizedException") {
+        message = "Incorrect email or password.";
+      } else if (error.message) {
+        message = error.message;
+      }
+
       toast({
         title: "Login failed",
-        description: "Please check your credentials and try again.",
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -80,6 +93,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
+
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
@@ -87,6 +101,7 @@ const Login = () => {
                   Forgot your password?
                 </Link>
               </div>
+
               <Input
                 id="password"
                 type="password"
@@ -96,6 +111,7 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+
             <div className="flex items-center space-x-2">
               <Checkbox 
                 id="remember-me" 
@@ -104,11 +120,12 @@ const Login = () => {
               />
               <label
                 htmlFor="remember-me"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-sm font-medium leading-none"
               >
                 Remember me
               </label>
             </div>
+
             <Button type="submit" className="w-full" disabled={isSubmitting}>
               {isSubmitting ? "Signing in..." : "Sign in"}
             </Button>
@@ -123,7 +140,7 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Right side with image and content */}
+      {/* Right side with image */}
       <div className="hidden lg:block lg:w-1/2 bg-muted relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-accent/30"></div>
         <div className="absolute inset-0 flex items-center justify-center p-12">
@@ -136,7 +153,7 @@ const Login = () => {
                 Get rewarded for your dedication
               </h2>
               <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed">
-                With L-earnings, your academic success directly impacts your final cost. Score 90% on your final assessment? Get 90% of your money back!
+                With L-earnings, your academic success directly impacts your cost. Score 90% and get 90% of your fee refunded!
               </p>
             </div>
           </div>
