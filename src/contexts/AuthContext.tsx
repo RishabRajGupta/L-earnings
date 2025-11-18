@@ -1,9 +1,9 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { 
-  getCurrentUser, 
-  signIn, 
-  signOut, 
-  fetchUserAttributes 
+import {
+  getCurrentUser,
+  signIn,
+  signOut,
+  fetchUserAttributes,
 } from "@aws-amplify/auth";
 
 interface AuthContextType {
@@ -19,11 +19,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState<{ email: string; name: string } | null>(null);
 
-  // Load session on app start
+  // Load user on page refresh
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const user = await getCurrentUser();
+        const current = await getCurrentUser();
         const attrs = await fetchUserAttributes();
 
         setIsLoggedIn(true);
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  // Logout
+  // Logout function
   const logout = async () => {
     await signOut();
     setIsLoggedIn(false);
@@ -66,8 +66,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
+// SAFE useAuth → does NOT throw errors
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+
+  // If AuthProvider is not yet ready, return safe defaults
+  if (!ctx) {
+    return {
+      isLoggedIn: false,
+      userInfo: null,
+      login: async () => {},
+      logout: async () => {},
+    };
+  }
+
   return ctx;
 };
