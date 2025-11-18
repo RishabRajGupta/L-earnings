@@ -1,8 +1,6 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,8 +14,8 @@ const Profile = () => {
   const { isLoggedIn, userInfo } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  
-  // Mock profile data - In a real app, this would come from your backend
+
+  // Mock profile data
   const profileData = {
     name: userInfo?.name || "John Smith",
     email: userInfo?.email || "johnsmith@example.com",
@@ -28,41 +26,39 @@ const Profile = () => {
     totalRefundEarned: "$149.99",
     bio: "Passionate about learning new technologies and expanding my skill set."
   };
-  
+
   const [formData, setFormData] = React.useState(profileData);
   const [isEditing, setIsEditing] = React.useState(false);
 
   React.useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/login");
-    }
+    if (!isLoggedIn) navigate("/login");
   }, [isLoggedIn, navigate]);
-  
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
-  
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, this would send the updated data to your backend
+
     toast({
       title: "Profile updated",
       description: "Your profile information has been updated successfully."
     });
+
     setIsEditing(false);
   };
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      {/* Navbar removed — global now */}
+
       <main className="flex-1 container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">My Profile</h1>
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* LEFT SIDEBAR */}
           <div>
             <Card>
               <CardHeader className="text-center">
@@ -74,29 +70,34 @@ const Profile = () => {
                 <CardTitle>{profileData.name}</CardTitle>
                 <CardDescription>{profileData.email}</CardDescription>
               </CardHeader>
+
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-3">
                   <Phone className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm">{profileData.phone}</span>
                 </div>
+
                 <div className="flex items-center gap-3">
                   <MapPin className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm">{profileData.address}</span>
                 </div>
+
                 <div className="flex items-center gap-3">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm">Member since {profileData.joinedDate}</span>
                 </div>
               </CardContent>
-              
+
               <Separator />
-              
+
               <CardContent className="pt-4 space-y-4">
                 <h3 className="text-sm font-semibold">Learning Stats</h3>
+
                 <div className="flex items-center gap-3">
                   <Clock className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm">{profileData.totalCoursesEnrolled} Courses Enrolled</span>
                 </div>
+
                 <div className="flex items-center gap-3">
                   <PiggyBank className="h-4 w-4 text-muted-foreground" />
                   <span className="text-sm">{profileData.totalRefundEarned} Refund Earned</span>
@@ -104,93 +105,97 @@ const Profile = () => {
               </CardContent>
             </Card>
           </div>
-          
+
+          {/* RIGHT SIDE ➝ EDITABLE FORM */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
                 <CardTitle>Profile Information</CardTitle>
                 <CardDescription>Update your personal information</CardDescription>
               </CardHeader>
+
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Form Fields */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="name">Full Name</Label>
-                      <Input 
+                      <Input
                         id="name"
                         name="name"
                         value={formData.name}
-                        onChange={handleInputChange}
                         disabled={!isEditing}
+                        onChange={handleInputChange}
                       />
                     </div>
+
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input 
+                      <Input
                         id="email"
                         name="email"
                         type="email"
                         value={formData.email}
-                        onChange={handleInputChange}
                         disabled={!isEditing}
+                        onChange={handleInputChange}
                       />
                     </div>
+
                     <div className="space-y-2">
                       <Label htmlFor="phone">Phone</Label>
-                      <Input 
+                      <Input
                         id="phone"
                         name="phone"
                         value={formData.phone}
-                        onChange={handleInputChange}
                         disabled={!isEditing}
+                        onChange={handleInputChange}
                       />
                     </div>
+
                     <div className="space-y-2">
                       <Label htmlFor="address">Address</Label>
-                      <Input 
+                      <Input
                         id="address"
                         name="address"
                         value={formData.address}
-                        onChange={handleInputChange}
                         disabled={!isEditing}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="bio">Bio</Label>
-                    <Input 
+                    <Input
                       id="bio"
                       name="bio"
                       value={formData.bio}
-                      onChange={handleInputChange}
                       disabled={!isEditing}
+                      onChange={handleInputChange}
                     />
                   </div>
-                  
+
                   {isEditing && (
                     <div className="flex justify-end gap-2 mt-6">
                       <Button type="button" variant="outline" onClick={() => setIsEditing(false)}>
                         Cancel
                       </Button>
-                      <Button type="submit">
-                        Save Changes
-                      </Button>
+                      <Button type="submit">Save Changes</Button>
                     </div>
                   )}
                 </form>
               </CardContent>
+
               {!isEditing && (
                 <CardFooter className="flex justify-end">
-                  <Button onClick={() => setIsEditing(true)}>
-                    Edit Profile
-                  </Button>
+                  <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
                 </CardFooter>
               )}
             </Card>
           </div>
         </div>
       </main>
+
       <Footer />
     </div>
   );
