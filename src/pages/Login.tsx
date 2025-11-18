@@ -25,11 +25,16 @@ const Login = () => {
     setIsSubmitting(true);
 
     try {
-      // 🔐 REAL Cognito login
-      const response = await signIn({
-        username: email,
-        password,
-      });
+      const response = await signIn({ username: email, password });
+    } catch (err: any) {
+      if (err.name === "UserAlreadyAuthenticatedException") {
+        // user is already logged in → continue without failing
+        console.warn("User already authenticated, continuing...");
+      } else {
+        throw err; // real errors should still throw
+      }
+    }
+
 
       toast({
         title: "Login successful",
