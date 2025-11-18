@@ -25,11 +25,11 @@ const Login = () => {
 
     try {
       // REAL Cognito authentication
-      const user = await signIn({ username: email, password });
+      const response = await signIn({ username: email, password });
 
       toast({
         title: "Login successful",
-        description: `Welcome back, ${user.attributes.email}!`,
+        description: `Welcome back, ${email}!`,
       });
 
       // Save authenticated user to React context
