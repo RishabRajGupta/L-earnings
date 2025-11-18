@@ -1,15 +1,14 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import {
-  getCurrentUser,
-  signIn,
-  signOut,
+import { 
+  getCurrentUser, 
   fetchUserAttributes,
+  signOut
 } from "@aws-amplify/auth";
 
 interface AuthContextType {
   isLoggedIn: boolean;
   userInfo: { email: string; name: string } | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string) => void;   // ⬅️ no password, no Cognito sign-in here
   logout: () => Promise<void>;
 }
 
@@ -19,11 +18,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState<{ email: string; name: string } | null>(null);
 
-  // Load user on page refresh
+  // Load authenticated user on app start
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const current = await getCurrentUser();
+        const user = await getCurrentUser();
         const attrs = await fetchUserAttributes();
 
         setIsLoggedIn(true);
@@ -40,19 +39,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     loadUser();
   }, []);
 
-  // Login function
-  const login = async (email: string, password: string) => {
-    const signedInUser = await signIn({ username: email, password });
-    const attrs = await fetchUserAttributes();
-
+  // login only updates UI state, NOT Cognito sign-in
+  const login = (email: string) => {
     setIsLoggedIn(true);
     setUserInfo({
-      email: attrs.email || email,
-      name: attrs.name || email,
+      email,
+      name: email,
     });
   };
 
-  // Logout function
   const logout = async () => {
     await signOut();
     setIsLoggedIn(false);
@@ -66,19 +61,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-// SAFE useAuth → does NOT throw errors
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-
-  // If AuthProvider is not yet ready, return safe defaults
-  if (!ctx) {
-    return {
-      isLoggedIn: false,
-      userInfo: null,
-      login: async () => {},
-      logout: async () => {},
-    };
-  }
-
+  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
   return ctx;
 };
