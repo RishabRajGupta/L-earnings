@@ -1,11 +1,11 @@
-
 import React, { createContext, useState, useContext, useEffect } from "react";
+import { Auth } from "aws-amplify";
 
 interface AuthContextType {
   isLoggedIn: boolean;
   userInfo: UserInfo | null;
-  login: (email: string, userData: UserInfo) => void;
-  logout: () => void;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 interface UserInfo {
@@ -19,31 +19,44 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
-  // Check if user is logged in on mount
+  // Load Cognito session on app start
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
+    const checkUser = async () => {
       try {
-        const userData = JSON.parse(storedUser);
-        setUserInfo(userData);
+        const cognitoUser = await Auth.currentAuthenticatedUser();
+        const email = cognitoUser.attributes.email;
+
+        setUserInfo({
+          email,
+          name: email.split("@")[0],
+        });
         setIsLoggedIn(true);
-      } catch (error) {
-        console.error("Error parsing user data from localStorage", error);
-        localStorage.removeItem("user");
+      } catch (err) {
+        // No valid session
+        setIsLoggedIn(false);
+        setUserInfo(null);
       }
-    }
+    };
+
+    checkUser();
   }, []);
 
-  const login = (email: string, userData: UserInfo) => {
+  // REAL LOGIN with Cognito
+  const login = async (email: string, password: string) => {
+    const user = await Auth.signIn(email, password);
+
     setIsLoggedIn(true);
-    setUserInfo(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+    setUserInfo({
+      email: user.attributes.email,
+      name: user.attributes.email.split("@")[0],
+    });
   };
 
-  const logout = () => {
+  // REAL LOGOUT
+  const logout = async () => {
+    await Auth.signOut();
     setIsLoggedIn(false);
     setUserInfo(null);
-    localStorage.removeItem("user");
   };
 
   return (
@@ -55,7 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
