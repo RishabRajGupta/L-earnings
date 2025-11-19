@@ -48,12 +48,121 @@ interface Course {
 // ---------------------------
 
 const coursesData: Record<string, Course> = {
-  /* ... (your full existing courses data stays unchanged) ... */
+  "1": {
+    id: "1",
+    title: "Python Programming Fundamentals",
+    description: "Learn the foundations of Python programming in this comprehensive course. You'll start with the basics and progress to building complete applications. Python is one of the most versatile and in-demand programming languages in the world, used for everything from web development to data science and machine learning.",
+    price: 5999.99,
+    category: "Programming",
+    level: "Beginner",
+    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&q=80&w=1200",
+    rating: 4.8,
+    duration: "6 weeks",
+    lessons: 42,
+    students: 1845,
+    instructor: {
+      name: "Dr. Alan Torres",
+      title: "Senior Software Engineer & Educator",
+      image: "https://i.pravatar.cc/150?img=3"
+    },
+    objectives: [
+      "Understand Python syntax and basic programming concepts",
+      "Work with Python data structures like lists, dictionaries, and tuples",
+      "Create functions and use object-oriented programming principles",
+      "Build real-world applications with Python",
+      "Implement error handling and debugging techniques"
+    ],
+    prerequisites: [
+      "No prior programming experience required",
+      "Basic computer skills",
+      "Computer with internet connection"
+    ],
+    syllabus: [
+      {
+        title: "Python Basics",
+        lessons: [
+          { title: "Introduction to Python", duration: "30 min" },
+          { title: "Setting Up Your Environment", duration: "45 min" },
+          { title: "Variables and Data Types", duration: "1 hr" },
+          { title: "Basic Operations", duration: "1 hr" }
+        ]
+      },
+      {
+        title: "Control Structures",
+        lessons: [
+          { title: "Conditional Statements", duration: "1 hr" },
+          { title: "Loops and Iterations", duration: "1.5 hrs" },
+          { title: "Practice Exercises", duration: "2 hrs" }
+        ]
+      },
+      {
+        title: "Data Structures",
+        lessons: [
+          { title: "Lists and Arrays", duration: "1 hr" },
+          { title: "Dictionaries", duration: "1 hr" },
+          { title: "Sets and Tuples", duration: "1 hr" },
+          { title: "Advanced Operations", duration: "1.5 hrs" }
+        ]
+      }
+    ]
+  },
+  "2": {
+    id: "2",
+    title: "Web Development Bootcamp",
+    description: "Master HTML, CSS, and JavaScript to create modern and responsive websites.",
+    price: 8999.99,
+    category: "Web Development",
+    level: "Intermediate",
+    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=1200",
+    rating: 4.9,
+    duration: "10 weeks",
+    lessons: 78,
+    students: 2450,
+    instructor: {
+      name: "Sarah Johnson",
+      title: "Full-Stack Developer",
+      image: "https://i.pravatar.cc/150?img=5"
+    },
+    objectives: [
+      "Build responsive websites with HTML5 and CSS3",
+      "Create interactive web applications with JavaScript",
+      "Implement modern frameworks like React",
+      "Deploy websites to production servers",
+      "Optimize websites for performance and SEO"
+    ],
+    prerequisites: [
+      "Basic understanding of HTML and CSS",
+      "Familiarity with basic programming concepts",
+      "Computer with internet connection"
+    ],
+    syllabus: [
+      {
+        title: "HTML & CSS Foundations",
+        lessons: [
+          { title: "Modern HTML5 Structure", duration: "1 hr" },
+          { title: "CSS Layout Systems", duration: "2 hrs" },
+          { title: "Responsive Design Principles", duration: "1.5 hrs" }
+        ]
+      },
+      {
+        title: "JavaScript Essentials",
+        lessons: [
+          { title: "JavaScript Syntax", duration: "1 hr" },
+          { title: "DOM Manipulation", duration: "2 hrs" },
+          { title: "Event Handling", duration: "1.5 hrs" }
+        ]
+      },
+      {
+        title: "Frontend Frameworks",
+        lessons: [
+          { title: "Introduction to React", duration: "2 hrs" },
+          { title: "Component-Based Architecture", duration: "1.5 hrs" },
+          { title: "State Management", duration: "2 hrs" }
+        ]
+      }
+    ]
+  }
 };
-
-// ---------------------------
-//  COMPONENT STARTS
-// ---------------------------
 
 const CourseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
