@@ -34,159 +34,159 @@ const Courses = () => {
   const categories = ["Programming", "Web Development", "Data Science", "Design", "Marketing", "Business"];
   const levels = ["Beginner", "Intermediate", "Advanced"];
 
+
   const allCourses: Course[] = [
-    const allCourses: Course[] = [
-    {
-      id: "1",
-      title: "Python Programming Fundamentals",
-      description: "Learn the basics of Python programming language and build your first applications.",
-      price: 5999.99,
-      category: "Programming",
-      level: "Beginner",
-      image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&q=80&w=600",
-      rating: 4.8,
-      duration: "6 weeks",
-      materials: [
-        { 
-          title: "Python Basics", 
-          content: "Python is a high-level, interpreted programming language known for its readability and versatility. This section covers variables, data types, and basic syntax." 
-        },
-        { 
-          title: "Control Flow", 
-          content: "Learn about if statements, loops, and conditional expressions to control the flow of your Python programs." 
-        },
-        { 
-          title: "Functions and Modules", 
-          content: "Discover how to write reusable code blocks with functions and organize your code into modules." 
-        }
-      ]
-    },
-    {
-      id: "2",
-      title: "Web Development Bootcamp",
-      description: "Master HTML, CSS, and JavaScript to create modern and responsive websites.",
-      price: 8999.99,
-      category: "Web Development",
-      level: "Intermediate",
-      image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=600",
-      rating: 4.9,
-      duration: "10 weeks",
-      materials: [
-        { 
-          title: "HTML Fundamentals", 
-          content: "HTML provides the structure for web pages. Learn about tags, attributes, and how to create well-formed HTML documents." 
-        },
-        { 
-          title: "CSS Styling", 
-          content: "CSS allows you to style your HTML elements. Explore selectors, properties, and how to create responsive designs." 
-        },
-        { 
-          title: "JavaScript Basics", 
-          content: "JavaScript adds interactivity to websites. Learn about variables, functions, DOM manipulation, and event handling." 
-        }
-      ]
-    },
-    {
-      id: "3",
-      title: "Data Science with R",
-      description: "Analyze data, create visualizations, and build predictive models using R.",
-      price: 7599.99,
-      category: "Data Science",
-      level: "Advanced",
-      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80&w=600",
-      rating: 4.7,
-      duration: "8 weeks",
-      materials: [
-        { 
-          title: "R Basics", 
-          content: "R is a programming language and software environment for statistical computing and graphics. This section covers basic syntax and data structures." 
-        },
-        { 
-          title: "Data Manipulation", 
-          content: "Learn how to manipulate and clean data using R packages like dplyr and tidyr." 
-        },
-        { 
-          title: "Data Visualization", 
-          content: "Create visualizations using R packages like ggplot2 and plotly." 
-        }
-      ]
-    },
-    {
-      id: "4",
-      title: "UI/UX Design Principles",
-      description: "Learn the fundamentals of user interface and user experience design.",
-      price: 6499.99,
-      category: "Design",
-      level: "Beginner",
-      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600",
-      rating: 4.5,
-      duration: "4 weeks",
-      materials: [
-        { 
-          title: "UI Design Fundamentals", 
-          content: "Learn about user interface design principles and best practices." 
-        },
-        { 
-          title: "UX Design Fundamentals", 
-          content: "Understand user experience design principles and how to create intuitive user interfaces." 
-        },
-        { 
-          title: "Prototyping", 
-          content: "Learn how to create wireframes and prototypes using tools like Figma or Sketch." 
-        }
-      ]
-    },
-    {
-      id: "5",
-      title: "Digital Marketing Strategy",
-      description: "Develop comprehensive digital marketing strategies for business growth.",
-      price: 7299.99,
-      category: "Marketing",
-      level: "Intermediate",
-      image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&q=80&w=600",
-      rating: 4.6,
-      duration: "6 weeks",
-      materials: [
-        { 
-          title: "Digital Marketing Basics", 
-          content: "Learn about the basics of digital marketing, including search engine optimization (SEO), social media marketing, and email marketing." 
-        },
-        { 
-          title: "Content Marketing", 
-          content: "Create and distribute valuable content to attract and engage your target audience." 
-        },
-        { 
-          title: "Analytics and Reporting", 
-          content: "Learn how to track and analyze your marketing efforts using tools like Google Analytics." 
-        }
-      ]
-    },
-    {
-      id: "6",
-      title: "Machine Learning Fundamentals",
-      description: "Introduction to machine learning algorithms and their applications.",
-      price: 9499.99,
-      category: "Data Science",
-      level: "Advanced",
-      image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=600",
-      rating: 4.9,
-      duration: "12 weeks",
-      materials: [
-        { 
-          title: "Machine Learning Fundamentals", 
-          content: "Learn about the basics of machine learning, including supervised and unsupervised learning." 
-        },
-        { 
-          title: "Algorithms and Models", 
-          content: "Explore popular machine learning algorithms like linear regression, decision trees, and neural networks." 
-        },
-        { 
-          title: "Applications", 
-          content: "Learn how to apply machine learning to real-world problems in fields like finance, healthcare, and marketing." 
-        }
-      ]
-    },
-  ];
+  {
+    id: "1",
+    title: "Python Programming Fundamentals",
+    description: "Learn the basics of Python programming language and build your first applications.",
+    price: 5999.99,
+    category: "Programming",
+    level: "Beginner",
+    image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&q=80&w=600",
+    rating: 4.8,
+    duration: "6 weeks",
+    materials: [
+      { 
+        title: "Python Basics", 
+        content: "Python is a high-level, interpreted programming language known for its readability and versatility. This section covers variables, data types, and basic syntax." 
+      },
+      { 
+        title: "Control Flow", 
+        content: "Learn about if statements, loops, and conditional expressions to control the flow of your Python programs." 
+      },
+      { 
+        title: "Functions and Modules", 
+        content: "Discover how to write reusable code blocks with functions and organize your code into modules." 
+      }
+    ]
+  },
+  {
+    id: "2",
+    title: "Web Development Bootcamp",
+    description: "Master HTML, CSS, and JavaScript to create modern and responsive websites.",
+    price: 8999.99,
+    category: "Web Development",
+    level: "Intermediate",
+    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=600",
+    rating: 4.9,
+    duration: "10 weeks",
+    materials: [
+      { 
+        title: "HTML Fundamentals", 
+        content: "HTML provides the structure for web pages. Learn about tags, attributes, and how to create well-formed HTML documents." 
+      },
+      { 
+        title: "CSS Styling", 
+        content: "CSS allows you to style your HTML elements. Explore selectors, properties, and how to create responsive designs." 
+      },
+      { 
+        title: "JavaScript Basics", 
+        content: "JavaScript adds interactivity to websites. Learn about variables, functions, DOM manipulation, and event handling." 
+      }
+    ]
+  },
+  {
+    id: "3",
+    title: "Data Science with R",
+    description: "Analyze data, create visualizations, and build predictive models using R.",
+    price: 7599.99,
+    category: "Data Science",
+    level: "Advanced",
+    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80&w=600",
+    rating: 4.7,
+    duration: "8 weeks",
+    materials: [
+      { 
+        title: "R Basics", 
+        content: "R is a programming language and software environment for statistical computing and graphics. This section covers basic syntax and data structures." 
+      },
+      { 
+        title: "Data Manipulation", 
+        content: "Learn how to manipulate and clean data using R packages like dplyr and tidyr." 
+      },
+      { 
+        title: "Data Visualization", 
+        content: "Create visualizations using R packages like ggplot2 and plotly." 
+      }
+    ]
+  },
+  {
+    id: "4",
+    title: "UI/UX Design Principles",
+    description: "Learn the fundamentals of user interface and user experience design.",
+    price: 6499.99,
+    category: "Design",
+    level: "Beginner",
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600",
+    rating: 4.5,
+    duration: "4 weeks",
+    materials: [
+      { 
+        title: "UI Design Fundamentals", 
+        content: "Learn about user interface design principles and best practices." 
+      },
+      { 
+        title: "UX Design Fundamentals", 
+        content: "Understand user experience design principles and how to create intuitive user interfaces." 
+      },
+      { 
+        title: "Prototyping", 
+        content: "Learn how to create wireframes and prototypes using tools like Figma or Sketch." 
+      }
+    ]
+  },
+  {
+    id: "5",
+    title: "Digital Marketing Strategy",
+    description: "Develop comprehensive digital marketing strategies for business growth.",
+    price: 7299.99,
+    category: "Marketing",
+    level: "Intermediate",
+    image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&q=80&w=600",
+    rating: 4.6,
+    duration: "6 weeks",
+    materials: [
+      { 
+        title: "Digital Marketing Basics", 
+        content: "Learn about the basics of digital marketing, including search engine optimization (SEO), social media marketing, and email marketing." 
+      },
+      { 
+        title: "Content Marketing", 
+        content: "Create and distribute valuable content to attract and engage your target audience." 
+      },
+      { 
+        title: "Analytics and Reporting", 
+        content: "Learn how to track and analyze your marketing efforts using tools like Google Analytics." 
+      }
+    ]
+  },
+  {
+    id: "6",
+    title: "Machine Learning Fundamentals",
+    description: "Introduction to machine learning algorithms and their applications.",
+    price: 9499.99,
+    category: "Data Science",
+    level: "Advanced",
+    image: "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=600",
+    rating: 4.9,
+    duration: "12 weeks",
+    materials: [
+      { 
+        title: "Machine Learning Fundamentals", 
+        content: "Learn about the basics of machine learning, including supervised and unsupervised learning." 
+      },
+      { 
+        title: "Algorithms and Models", 
+        content: "Explore popular machine learning algorithms like linear regression, decision trees, and neural networks." 
+      },
+      { 
+        title: "Applications", 
+        content: "Learn how to apply machine learning to real-world problems in fields like finance, healthcare, and marketing." 
+      }
+    ]
+  },
+];
 
   const handleEnrollCourse = (course: Course) => {
     try {
