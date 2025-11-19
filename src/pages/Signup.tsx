@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 const SAVE_PROFILE_URL =
   "https://3l0qi6u7nc.execute-api.us-east-1.amazonaws.com/newStage2/profile";
 
+
 const Signup = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
