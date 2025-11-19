@@ -2,57 +2,108 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Footer from "@/components/Footer";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { User, Mail, Phone, MapPin, Calendar, Clock, PiggyBank } from "lucide-react";
+import { User, Phone, MapPin, Calendar, Clock, PiggyBank } from "lucide-react";
+
+const GET_PROFILE_URL =
+  "https://29awwpy12k.execute-api.us-east-1.amazonaws.com/newStage/profile";
+const SAVE_PROFILE_URL =
+  "https://3l0qi6u7nc.execute-api.us-east-1.amazonaws.com/newStage2/profile";
 
 const Profile = () => {
   const { isLoggedIn, userInfo } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Mock profile data
-  const profileData = {
-    name: userInfo?.name || "John Smith",
-    email: userInfo?.email || "johnsmith@example.com",
-    phone: "+1 234 567 8901",
-    address: "123 Main St, Anytown, USA",
-    joinedDate: "January 2023",
-    totalCoursesEnrolled: 2,
-    totalRefundEarned: "$149.99",
-    bio: "Passionate about learning new technologies and expanding my skill set."
-  };
+  const userId = userInfo?.sub || userInfo?.email || "defaultUser";
 
-  const [formData, setFormData] = React.useState(profileData);
+  const [formData, setFormData] = React.useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    bio: "",
+  });
+
   const [isEditing, setIsEditing] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
 
+  // 🚀 FETCH PROFILE FROM API
   React.useEffect(() => {
-    if (!isLoggedIn) navigate("/login");
-  }, [isLoggedIn, navigate]);
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+    fetch(`${GET_PROFILE_URL}?userId=${userId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setFormData({
+          name: data.name || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          address: data.address || "",
+          bio: data.bio || "",
+        });
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Profile load error:", err);
+        setLoading(false);
+      });
+  }, [isLoggedIn, navigate, userId]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // ----------------------------------------------
+  // 🚀 SAVE PROFILE TO DYNAMODB (POST API)
+  // ----------------------------------------------
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const body = {
+      userId,
+      ...formData,
+    };
+
+    const res = await fetch(SAVE_PROFILE_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    const result = await res.json();
+
     toast({
-      title: "Profile updated",
-      description: "Your profile information has been updated successfully."
+      title: "Profile Updated",
+      description: "Your profile has been saved successfully.",
     });
 
     setIsEditing(false);
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  if (loading) {
+    return <div className="text-center mt-10 text-lg">Loading profile...</div>;
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Navbar removed — global now */}
+      {/* Navbar removed — global */}
 
       <main className="flex-1 container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">My Profile</h1>
@@ -67,24 +118,21 @@ const Profile = () => {
                     <User className="h-14 w-14 text-primary" />
                   </div>
                 </div>
-                <CardTitle>{profileData.name}</CardTitle>
-                <CardDescription>{profileData.email}</CardDescription>
+                <CardTitle>{formData.name || "No Name"}</CardTitle>
+                <CardDescription>{formData.email || "No Email"}</CardDescription>
               </CardHeader>
 
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-3">
                   <Phone className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{profileData.phone}</span>
+                  <span className="text-sm">{formData.phone || "No phone"}</span>
                 </div>
 
                 <div className="flex items-center gap-3">
                   <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{profileData.address}</span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">Member since {profileData.joinedDate}</span>
+                  <span className="text-sm">
+                    {formData.address || "No address"}
+                  </span>
                 </div>
               </CardContent>
 
@@ -95,18 +143,18 @@ const Profile = () => {
 
                 <div className="flex items-center gap-3">
                   <Clock className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{profileData.totalCoursesEnrolled} Courses Enrolled</span>
+                  <span className="text-sm">Courses Enrolled: 0</span>
                 </div>
 
                 <div className="flex items-center gap-3">
                   <PiggyBank className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{profileData.totalRefundEarned} Refund Earned</span>
+                  <span className="text-sm">Refund Earned: ₹0</span>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* RIGHT SIDE ➝ EDITABLE FORM */}
+          {/* RIGHT SIDE — EDIT FORM */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
@@ -116,12 +164,12 @@ const Profile = () => {
 
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* Form Fields */}
+                  {/* 4 FIELD GRID */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
+                    {/* Name */}
+                    <div>
+                      <Label>Name</Label>
                       <Input
-                        id="name"
                         name="name"
                         value={formData.name}
                         disabled={!isEditing}
@@ -129,10 +177,10 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                    {/* Email */}
+                    <div>
+                      <Label>Email</Label>
                       <Input
-                        id="email"
                         name="email"
                         type="email"
                         value={formData.email}
@@ -141,10 +189,10 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone</Label>
+                    {/* Phone */}
+                    <div>
+                      <Label>Phone</Label>
                       <Input
-                        id="phone"
                         name="phone"
                         value={formData.phone}
                         disabled={!isEditing}
@@ -152,10 +200,10 @@ const Profile = () => {
                       />
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="address">Address</Label>
+                    {/* Address */}
+                    <div>
+                      <Label>Address</Label>
                       <Input
-                        id="address"
                         name="address"
                         value={formData.address}
                         disabled={!isEditing}
@@ -164,10 +212,10 @@ const Profile = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="bio">Bio</Label>
+                  {/* Bio */}
+                  <div>
+                    <Label>Bio</Label>
                     <Input
-                      id="bio"
                       name="bio"
                       value={formData.bio}
                       disabled={!isEditing}
@@ -175,22 +223,27 @@ const Profile = () => {
                     />
                   </div>
 
-                  {isEditing && (
+                  {/* Buttons */}
+                  {isEditing ? (
                     <div className="flex justify-end gap-2 mt-6">
-                      <Button type="button" variant="outline" onClick={() => setIsEditing(false)}>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setIsEditing(false)}
+                      >
                         Cancel
                       </Button>
                       <Button type="submit">Save Changes</Button>
                     </div>
+                  ) : (
+                    <CardFooter className="flex justify-end">
+                      <Button onClick={() => setIsEditing(true)}>
+                        Edit Profile
+                      </Button>
+                    </CardFooter>
                   )}
                 </form>
               </CardContent>
-
-              {!isEditing && (
-                <CardFooter className="flex justify-end">
-                  <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
-                </CardFooter>
-              )}
             </Card>
           </div>
         </div>
