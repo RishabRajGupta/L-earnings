@@ -15,8 +15,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import { User, Phone, MapPin, Calendar, Clock, PiggyBank } from "lucide-react";
+import { User, Phone, MapPin, Clock, PiggyBank } from "lucide-react";
 
+// ✅ YOUR API ENDPOINTS
 const GET_PROFILE_URL =
   "https://29awwpy12k.execute-api.us-east-1.amazonaws.com/newStage/profile";
 const SAVE_PROFILE_URL =
@@ -27,7 +28,8 @@ const Profile = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const userId = userInfo?.sub || userInfo?.email || "defaultUser";
+  // ⚠ CRUCIAL — unique stable ID for DynamoDB
+  const userId = userInfo?.sub || userInfo?.email;
 
   const [formData, setFormData] = React.useState({
     name: "",
@@ -40,12 +42,16 @@ const Profile = () => {
   const [isEditing, setIsEditing] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
-  // 🚀 FETCH PROFILE FROM API
+  // ----------------------------------------------------------------
+  // ✅ FETCH PROFILE (GET from API Gateway → Lambda → DynamoDB)
+  // ----------------------------------------------------------------
   React.useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login");
       return;
     }
+
+    if (!userId) return;
 
     fetch(`${GET_PROFILE_URL}?userId=${userId}`)
       .then((res) => res.json())
@@ -60,36 +66,42 @@ const Profile = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Profile load error:", err);
+        console.error("GET profile error:", err);
         setLoading(false);
       });
   }, [isLoggedIn, navigate, userId]);
 
-  // ----------------------------------------------
-  // 🚀 SAVE PROFILE TO DYNAMODB (POST API)
-  // ----------------------------------------------
+  // ----------------------------------------------------------------
+  // ✅ SAVE PROFILE (POST to API Gateway → Lambda → DynamoDB)
+  // ----------------------------------------------------------------
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const body = {
-      userId,
-      ...formData,
-    };
+    const body = { userId, ...formData };
 
-    const res = await fetch(SAVE_PROFILE_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    try {
+      const res = await fetch(SAVE_PROFILE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
 
-    const result = await res.json();
+      const result = await res.json();
 
-    toast({
-      title: "Profile Updated",
-      description: "Your profile has been saved successfully.",
-    });
+      toast({
+        title: "Profile Saved",
+        description: "Your profile has been updated.",
+      });
 
-    setIsEditing(false);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("SAVE profile error:", error);
+      toast({
+        title: "Error",
+        description: "Could not save profile.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,9 +142,7 @@ const Profile = () => {
 
                 <div className="flex items-center gap-3">
                   <MapPin className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">
-                    {formData.address || "No address"}
-                  </span>
+                  <span className="text-sm">{formData.address || "No address"}</span>
                 </div>
               </CardContent>
 
@@ -164,9 +174,8 @@ const Profile = () => {
 
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* 4 FIELD GRID */}
+                  {/* GRID FIELDS */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Name */}
                     <div>
                       <Label>Name</Label>
                       <Input
@@ -177,7 +186,6 @@ const Profile = () => {
                       />
                     </div>
 
-                    {/* Email */}
                     <div>
                       <Label>Email</Label>
                       <Input
@@ -189,7 +197,6 @@ const Profile = () => {
                       />
                     </div>
 
-                    {/* Phone */}
                     <div>
                       <Label>Phone</Label>
                       <Input
@@ -200,7 +207,6 @@ const Profile = () => {
                       />
                     </div>
 
-                    {/* Address */}
                     <div>
                       <Label>Address</Label>
                       <Input
@@ -212,7 +218,6 @@ const Profile = () => {
                     </div>
                   </div>
 
-                  {/* Bio */}
                   <div>
                     <Label>Bio</Label>
                     <Input
@@ -223,7 +228,6 @@ const Profile = () => {
                     />
                   </div>
 
-                  {/* Buttons */}
                   {isEditing ? (
                     <div className="flex justify-end gap-2 mt-6">
                       <Button
